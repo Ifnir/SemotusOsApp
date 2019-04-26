@@ -1,29 +1,38 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    
+    
+
+  <ul id="slide-out" class="sidenav sidenav-fixed">
+    <li>
+      <div class="user-view">
+        <div class="background">
+          <img src="images/office.jpg">
+        </div>
+          <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
+          <a href="#name"><span class="white-text name">John Doe</span></a>
+          <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
     </div>
+    </li>
+      <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+      <li><a href="#!">Second Link</a></li>
+      <li><div class="divider"></div></li>
+      <li><a class="subheader">Subheader</a></li>
+      <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+  </ul>
+  
+        
+        
     <router-view/>
   </div>
 </template>
+<script>
+export default {
+  
+}
+</script>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+
+<style lang="scss" scoped>
+
 </style>
