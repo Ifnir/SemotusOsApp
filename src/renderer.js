@@ -3,6 +3,7 @@
 // All of the Node.js APIs are available in this process.
 const remote = require('electron').remote;
 
+
 (function handleWindowControls() {
     // When document has loaded, initialise
     document.onreadystatechange = () => {
@@ -47,6 +48,7 @@ const remote = require('electron').remote;
             window = remote.getCurrentWindow();
             window.close();
         });
+
 
         function toggleMaxRestoreButtons() {
             window = remote.getCurrentWindow();
