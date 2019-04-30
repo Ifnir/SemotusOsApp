@@ -2,10 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { ipcRenderer } from 'electron'
+import qs from 'qs'
 
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost:3000'
+
 
 export default new Vuex.Store({
   state: {
@@ -27,13 +29,24 @@ export default new Vuex.Store({
   },
   actions: {
     retrieveToken(context, credentials){
+      var Basicaouth = 'Basic dGVzdDE6cGFzc3dvcmQx'
+      let config = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: Basicaouth
+        }
+      }
+
+      const data = qs.stringify({
+        grant_type: 'password',
+        username: credentials.username,
+        password: credentials.password,
+      })
+
       return new Promise((resolve, reject) => {
-        axios.post('/oauth/token', {
-          username: credentials.username,
-          password: credentials.password,
-          grant_type: 'password'
-        }).then(response => {
+        axios.post('/oauth/token', data, config).then(response => {
           const token = response.data.accessToken
+          console.log(token)
 
           ipcRenderer.sendSync('login-success', 'success')
 

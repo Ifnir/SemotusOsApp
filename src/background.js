@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, IpcMain } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+
 import {
   createProtocol,
   installVueDevtools
@@ -15,6 +16,14 @@ let login
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
 
+ipcMain.on('login-success', (event, arg) => {
+  if(arg == 'success') {
+         win.show()
+         login.hide()
+       }
+})
+
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({ width: 1600, height: 960, frame: false, backgroundColor: '#FFF', show: false })
@@ -27,6 +36,7 @@ function createWindow () {
     login.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/login')
 
     if (!process.env.IS_TEST) win.webContents.openDevTools()
+    if (!process.env.IS_TEST) login.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
@@ -39,13 +49,7 @@ function createWindow () {
   
 
 }
-// Ipc listen to event
-IpcMain.on('login-success', (event, arg) => {
-    if(arg == 'success') {
-      win.show()
-      login.hide()
-    }
-})
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
