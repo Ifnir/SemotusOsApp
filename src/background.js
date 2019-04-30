@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, IpcMain } from 'electron'
 import {
   createProtocol,
   installVueDevtools
@@ -17,7 +17,7 @@ protocol.registerStandardSchemes(['app'], { secure: true })
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 1600, height: 960, frame: false, backgroundColor: '#FFF', show: true })
+  win = new BrowserWindow({ width: 1600, height: 960, frame: false, backgroundColor: '#FFF', show: false })
   // Create child browser window parent to win
   login = new BrowserWindow({ parent: win, width: 400, height: 300, frame: false, show: true })
 
@@ -39,6 +39,13 @@ function createWindow () {
   
 
 }
+// Ipc listen to event
+IpcMain.on('login-success', (event, arg) => {
+    if(arg == 'success') {
+      win.show()
+      login.hide()
+    }
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
