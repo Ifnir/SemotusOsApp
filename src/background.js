@@ -18,9 +18,14 @@ protocol.registerStandardSchemes(['app'], { secure: true })
 
 ipcMain.on('login-success', (event, arg) => {
   if(arg == 'success') {
+    win.reload()
          win.show()
          login.hide()
        }
+  if(arg == 'logout') {
+    app.exit(0)
+   
+  }
 })
 
 
@@ -56,7 +61,7 @@ app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit(0)
   }
 })
 
@@ -88,12 +93,12 @@ if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', data => {
       if (data === 'graceful-exit') {
-        app.quit()
+        app.quit(0)
       }
     })
   } else {
     process.on('SIGTERM', () => {
-      app.quit()
+      app.quit(0)
     })
   }
 }

@@ -19,24 +19,27 @@ const remote = require('electron').remote;
             restoreButton = document.getElementById('restore-button'),
             closeButton = document.getElementById('close-button');
 
-        minButton.addEventListener("click", () => {
-            window = remote.getCurrentWindow();
-            window.minimize();
-            console.log("asdasasd")
-        });
-
-        maxButton.addEventListener("click", () => {
-            window = remote.getCurrentWindow();
-            window.maximize();
-            toggleMaxRestoreButtons();
-        });
-
-        restoreButton.addEventListener("click", () => {
-            window = remote.getCurrentWindow();
-            window.unmaximize();
-            toggleMaxRestoreButtons();
-        });
-
+        if(minButton){
+            minButton.addEventListener("click", () => {
+                window = remote.getCurrentWindow();
+                window.minimize();
+                
+            });
+        }
+        if(maxButton) {
+            maxButton.addEventListener("click", () => {
+                window = remote.getCurrentWindow();
+                window.maximize();
+                toggleMaxRestoreButtons();
+            });
+        }
+        if(restoreButton) {
+            restoreButton.addEventListener("click", () => {
+                window = remote.getCurrentWindow();
+                window.unmaximize();
+                toggleMaxRestoreButtons();
+            });
+        }
         // Toggle maximise/restore buttons when maximisation/unmaximisation
         // occurs by means other than button clicks e.g. double-clicking
         // the title bar:
@@ -44,11 +47,12 @@ const remote = require('electron').remote;
         window.on('maximize', toggleMaxRestoreButtons);
         window.on('unmaximize', toggleMaxRestoreButtons);
 
-        closeButton.addEventListener("click", () => {
-            window = remote.getCurrentWindow();
-            window.close();
-        });
-
+        if(closeButton){
+            closeButton.addEventListener("click", () => {
+                window = remote.getCurrentWindow();
+                window.close();
+            });
+        }
 
         function toggleMaxRestoreButtons() {
             window = remote.getCurrentWindow();
@@ -56,8 +60,10 @@ const remote = require('electron').remote;
                 maxButton.style.display = "none";
                 restoreButton.style.display = "flex";
             } else {
+                if(restoreButton){
                 restoreButton.style.display = "none";
                 maxButton.style.display = "flex";
+                }
             }
         }
     }
