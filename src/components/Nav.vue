@@ -12,8 +12,10 @@
                 <router-link to="/logout" class="logout"><span class="white-text"><i class="fas fa-sign-out-alt"></i>Logout</span></router-link>
             </div>
             </li>
-            <li><router-link to="/"><i class="fas fa-camera"></i>First Link With Icon</router-link></li>
-            <li><router-link to="/front">Second Link</router-link></li>
+            <li><router-link to="/"><i class="fas fa-camera"></i>Home</router-link></li>
+            <li><router-link to="/elder">Elder</router-link></li>
+            <li><router-link to="/beacon">Beacon</router-link></li>
+            <li><router-link to="/check">Check</router-link></li>
             <li><div class="divider"></div></li>
             <li><a class="subheader">Subheader</a></li>
             <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>

@@ -1,11 +1,10 @@
+$danger-color: #d42727;
+$danger-color-hover: #cc4c4c;
+
 body {
     overflow-y: hidden;
   }
-  /* 
-  *
-  * Header
-  *
-  */
+ // Header
   #titlebar {
     display: block;
     position: fixed;
@@ -79,13 +78,10 @@ body {
     line-height: 1.5;
     color:white;
   }
-  /*
-  *
-  * Style fixing
-  *
-  */
+// Style
 .wrapper {
     padding-left: 320px;
+    padding-right: 30px;
 }
 .top {
   padding-top: 40px;
@@ -109,3 +105,22 @@ body {
 .btn:hover {
   background-color: #44647a;
 }
+.btn-large {
+  background-color: #254053;
+}
+.btn-large:hover {
+  background-color: #44647a;
+}
+// Delete
+.delete {
+  background-color: $danger-color;
+}
+.delete:hover {
+  background-color: $danger-color-hover;
+}
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
