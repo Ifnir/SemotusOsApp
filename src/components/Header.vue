@@ -22,8 +22,9 @@
     </header>
 </template>
 <script>
+require('./../renderer.js')
 export default {
-    
+
 }
 </script>
 <style lang="scss">

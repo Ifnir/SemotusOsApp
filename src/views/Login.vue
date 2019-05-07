@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <Header></Header>
+    <div class="top">
       <div class="container">
         <br/>
         <form action="#" @submit.prevent="login">       
@@ -12,20 +12,23 @@
               <label for="pwd">Password:</label>
               <input type="password" class="form-control" id="txtPwd" v-model="password">
           </div>
-             <button class="btn btn-default" id="btn-login">Login</button>
+            <div class="center-align">
+              <button class="btn btn-default" id="btn-login">Login</button><br>
+              <a href="#"><p id="close-button">Close Program</p></a>
+            </div>
         </form>
     </div>
+  </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Header from './../components/Header.vue';
+
 
 export default {
   name: 'login',
   components: {
-    Header
   },
   data() {
     return {

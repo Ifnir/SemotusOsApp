@@ -48,11 +48,11 @@ export default new Vuex.Store({
           const token = response.data.accessToken
           console.log(token)
 
-          ipcRenderer.sendSync('login-success', 'success')
-
           localStorage.setItem('accesstoken', token)
           context.commit('retrieveToken', token)
           resolve(response)
+
+          ipcRenderer.sendSync('login-success', 'success')
         }).catch(err => {
           console.log(err)
           reject(err)
@@ -62,6 +62,24 @@ export default new Vuex.Store({
     },
     destroyToken(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      if (context.getters.loggedIn) {
+        ipcRenderer.sendSync('login-success', 'logout')
+        return new Promise((resolve, reject) => {
+          axios.post('/logout')
+            .then(response => {
+              
+              localStorage.removeItem('access_token')
+              context.commit('destroyToken')
+              resolve(response)
+            })
+            .catch(error => {
+              localStorage.removeItem('access_token')
+              context.commit('destroyToken')
+              reject(error)
+            })
+        })
+}
 
     }
 

@@ -1,7 +1,10 @@
+$danger-color: #d42727;
+$danger-color-hover: #cc4c4c;
+
 body {
-    border: 1px solid #48545c;
     overflow-y: hidden;
   }
+ // Header
   #titlebar {
     display: block;
     position: fixed;
@@ -75,6 +78,49 @@ body {
     line-height: 1.5;
     color:white;
   }
+// Style
 .wrapper {
-    padding-left: 300px;
+    padding-left: 320px;
+    padding-right: 30px;
 }
+.top {
+  padding-top: 40px;
+}
+.sidenav {
+  top: 20px;
+}
+.logout {
+  float: right;
+  left: 100px;
+  margin-top: -50px;
+}
+/*
+*
+* buttons
+*
+*/
+.btn {
+  background-color: #254053;
+}
+.btn:hover {
+  background-color: #44647a;
+}
+.btn-large {
+  background-color: #254053;
+}
+.btn-large:hover {
+  background-color: #44647a;
+}
+// Delete
+.delete {
+  background-color: $danger-color;
+}
+.delete:hover {
+  background-color: $danger-color-hover;
+}
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
