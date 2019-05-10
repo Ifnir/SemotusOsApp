@@ -12,13 +12,29 @@ axios.defaults.baseURL = 'http://localhost:3000'
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('accesstoken') || null,
+    beacons: [],
+    elders: [],
+    checks: [],
   },
   getters: {
     loggedIn(state) {
       return state.token !== null
+    },
+    allBeacons(state) {
+      return state.beacons.data
     }
   },
   mutations: {
+    retrieveBeacons(state, beacons){
+      state.beacons = beacons
+    },
+    retrieveElders(state, elders) {
+      state.elders = elders
+    },
+    retrieveChecks(state, checks) {
+      state.checks = checks
+    },
+    // Token
     retrieveToken(state, token) {
       state.token = token
     },
@@ -28,6 +44,73 @@ export default new Vuex.Store({
 
   },
   actions: {
+    AuthorizationCall(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+    },
+    // Beacons
+    retrieveBeacons(context) {
+      this.AuthorizationCall()
+
+      axios.get('/beacons')
+      .then(response => {
+        context.commit('retrieveBeacons', response.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    addBeacon(context, beacon) {
+      axios.post('/beacons', {
+        tag: beacon.tag,
+        name: beacon.name,
+        identifier: beacon.identifier,
+        attachment_value: beacon.attachment_value,
+        attachment_key: beacon.attachment_key
+      })
+        .then(response => {
+          context.commit('addBeacon', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    updateBeacon(context, beacon) {
+      axios.patch('/todos' + beacon.id, body, {
+        title: todo.title,
+        completed: todo.completed,
+      })
+        .then(response => {
+          context.commit('updateTodo', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    // Elders
+    retrieveElders(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/elders')
+      .then(response => {
+        context.commit('retrieveBeacons', response.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    // Checks
+    retrieveChecks(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/checks')
+      .then(response => {
+        context.commit('retrieveBeacons', response.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    //Token
     retrieveToken(context, credentials){
       var Basicaouth = 'Basic dGVzdDE6cGFzc3dvcmQx'
       let config = {
