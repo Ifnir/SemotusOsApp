@@ -44,14 +44,11 @@ export default new Vuex.Store({
 
   },
   actions: {
-    AuthorizationCall(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-    },
     // Beacons
     retrieveBeacons(context) {
-      this.AuthorizationCall()
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-      axios.get('/beacons')
+      axios.get('/beacon')
       .then(response => {
         context.commit('retrieveBeacons', response.data)
       })
@@ -60,7 +57,7 @@ export default new Vuex.Store({
       })
     },
     addBeacon(context, beacon) {
-      axios.post('/beacons', {
+      axios.post('/beacon', {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
@@ -75,12 +72,15 @@ export default new Vuex.Store({
         })
     },
     updateBeacon(context, beacon) {
-      axios.patch('/todos' + beacon.id, body, {
-        title: todo.title,
-        completed: todo.completed,
+      axios.patch('/beacon' + beacon.id,  {
+        tag: beacon.tag,
+        name: beacon.name,
+        identifier: beacon.identifier,
+        attachment_value: beacon.attachment_value,
+        attachment_key: beacon.attachment_key
       })
         .then(response => {
-          context.commit('updateTodo', response.data)
+          context.commit('updateBeacon', response.data)
         })
         .catch(error => {
           console.log(error)
