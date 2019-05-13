@@ -32,12 +32,41 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    // ---------- Beacons
     retrieveBeacons(state, beacons){
       state.beacons = beacons
     },
+    addBeacon(state, beacon) {
+      state.beacons.push({
+        'id': beacon.id,
+        'tag': beacon.tag,
+        'identifier': beacon.identifier,
+        'name': beacon.name,
+        'attachment_key': beacon.attachment_key,
+        'attachment_value': beacon.attachment_value
+      })
+    },
+    updateBeacons(state, beacons) {
+      const index = state.beacons.findIndex(item => item.id == beacon.id)
+
+      state.beacons.splice(index, 1, {
+        'id': beacon.id,
+        'tag': beacon.tag,
+        'identifier': beacon.identifier,
+        'name': beacon.name,
+        'attachment_key': beacon.attachment_key,
+        'attachment_value': beacon.attachment_value
+      })
+    },
+    deleteBeacons(state, id) {
+      const index = state.beacons.findIndex(item => item.id == id)
+      state.beacons.splice(index, 1)
+    },
+    // ---------- Elders
     retrieveElders(state, elders) {
       state.elders = elders
     },
+    // ---------- Checks
     retrieveChecks(state, checks) {
       state.checks = checks
     },
@@ -51,7 +80,8 @@ export default new Vuex.Store({
 
   },
   actions: {
-    // Beacons
+
+    // -----------------------------------------------------Beacons
     retrieveBeacons(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
@@ -64,7 +94,7 @@ export default new Vuex.Store({
       })
     },
     addBeacon(context, beacon) {
-      axios.post('/beacon', {
+      axios.post('/beacon/create', {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
@@ -79,7 +109,7 @@ export default new Vuex.Store({
         })
     },
     updateBeacon(context, beacon) {
-      axios.patch('/beacon' + beacon.id,  {
+      axios.patch('/beacon_id/edit' + beacon.id,  {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
@@ -93,7 +123,16 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    // Elders
+    deleteBeacon(context, id) {
+      axios.delete('/beacon_id' + id)
+      .then(response => {
+        context.commit('deleteBeacon', id)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    // -------------------------------------------------------Elders
     retrieveElders(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
@@ -105,7 +144,7 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
-    // Checks
+    // --------------------------------------------------------Checks
     retrieveChecks(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
@@ -169,7 +208,7 @@ export default new Vuex.Store({
               reject(error)
             })
         })
-}
+      }
 
     }
 
