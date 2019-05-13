@@ -144,6 +144,39 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
+    addElders(context, elder) {
+      axios.post('/elder/create', {
+        name: elder.name,
+        beaconId: elder.beaconId
+      })
+        .then(response => {
+          context.commit('addBeacon', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    updateElder(context, beacon) {
+      axios.patch('/elder_id/edit' + beacon.id,  {
+        name: elder.name,
+        beaconId: elder.beaconId
+      })
+        .then(response => {
+          context.commit('updateBeacon', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    deleteElder(context, id) {
+      axios.delete('/elder_id' + id)
+      .then(response => {
+        context.commit('deleteBeacon', id)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     // --------------------------------------------------------Checks
     retrieveChecks(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
