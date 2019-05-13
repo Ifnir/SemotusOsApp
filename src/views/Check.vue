@@ -10,14 +10,16 @@
               <th>Elder</th>
               <th>User</th>
               <th>Time</th>
+              <th>Check</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>11:11:11</td>
+          <tr v-for="check in anyChecks" :key="check.id">
+            <td>{{ check.elders.name }}</td>
+            <td>{{ check.users.username }}</td>
+            <td>{{ check.timestamp}}</td>
+            <td>{{ check.check ? 'Out' : 'In' }}</td>
           </tr>
         </tbody>
       </table>
@@ -32,6 +34,14 @@ export default {
   name: 'check',
   components: {
       Nav
+  },
+  created() {
+    this.$store.dispatch('retrieveChecks')
+  },
+  computed: {
+    anyChecks() {
+      return this.$store.getters.allChecks
+    }
   }
 }
 </script>

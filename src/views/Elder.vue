@@ -6,19 +6,19 @@
       <hr>
       <a class="waves-effect waves-light btn-large">Add New</a>
       <hr>
+
       <table>
         <thead>
           <tr>
               <th>Name</th>
-              <th>Beacon</th>
               <th>Action</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>Alvin</td>
-            <td>Snow</td>
+          <tr v-for="elder in anyElders" :key="elder.id">
+            <td>{{ elder.name }}</td>
+            <td>{{ elder.beaconId }} </td>
              <td>
                 <a class="waves-effect waves-light btn">Edit</a><div class="divider"/>
                 <a class="waves-effect waves-light btn delete">Delete</a>
@@ -37,6 +37,14 @@ export default {
   name: 'elder',
   components: {
       Nav
+  },
+  created() {
+    this.$store.dispatch('retrieveElders')
+  },
+  computed: {
+    anyElders() {
+      return this.$store.getters.allElders
+    }
   }
 }
 </script>

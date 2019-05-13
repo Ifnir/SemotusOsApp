@@ -22,6 +22,13 @@ export default new Vuex.Store({
     },
     allBeacons(state) {
       return state.beacons.data
+    },
+    allElders(state) {
+      return state.elders.data
+    }
+    ,
+    allChecks(state) {
+      return state.checks.data
     }
   },
   mutations: {
@@ -92,7 +99,7 @@ export default new Vuex.Store({
 
       axios.get('/elders')
       .then(response => {
-        context.commit('retrieveBeacons', response.data)
+        context.commit('retrieveElders', response.data)
       })
       .catch(err => {
         console.log(err)
@@ -102,9 +109,9 @@ export default new Vuex.Store({
     retrieveChecks(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
-      axios.get('/checks')
+      axios.get('/check_ins')
       .then(response => {
-        context.commit('retrieveBeacons', response.data)
+        context.commit('retrieveChecks', response.data)
       })
       .catch(err => {
         console.log(err)
