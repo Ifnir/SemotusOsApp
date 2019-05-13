@@ -47,9 +47,9 @@ export default new Vuex.Store({
       })
     },
     updateBeacons(state, beacon) {
-      const index = state.beacons.findIndex(item => item.id == beacon.id)
+      const index = state.beacons.data.findIndex(item => item.id == beacon.id)
 
-      state.beacons.splice(index, 1, {
+      state.beacons.data.splice(index, 1, {
         'id': beacon.id,
         'tag': beacon.tag,
         'identifier': beacon.identifier,
@@ -59,8 +59,8 @@ export default new Vuex.Store({
       })
     },
     deleteBeacons(state, id) {
-      const index = state.beacons.findIndex(item => item.id == id)
-      state.beacons.splice(index, 1)
+      const index = state.beacons.data.findIndex(item => item.id == id)
+      state.beacons.data.splice(index, 1)
     },
     // ---------- Elders
     retrieveElders(state, elders) {
@@ -109,13 +109,13 @@ export default new Vuex.Store({
         })
     },
     updateBeacon(context, beacon) {
-      axios.patch('/beacon_id/edit' + beacon.id,  {
+      axios.patch('/beacon_id/edit', {data: {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
         attachment_key: beacon.attachment_key
-      })
+      }})
         .then(response => {
           context.commit('updateBeacon', response.data)
         })
@@ -124,9 +124,12 @@ export default new Vuex.Store({
         })
     },
     deleteBeacon(context, id) {
-      axios.delete('/beacon_id' + id)
-      .then(() => {
-        context.commit('deleteBeacon', id)
+      axios.delete('/beacon_id',
+      {data: {
+        id: id
+      }})
+      .then(function(response) {
+        context.commit('deleteBeacons', id)
       })
       .catch(error => {
         console.log(error)
