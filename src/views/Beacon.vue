@@ -15,7 +15,7 @@
               <th>Identifier</th>
               <th>Attachment Key</th>
               <th>Attachment Value</th>
-              <th>Action</th>
+              <th></th>
           </tr>
         </thead>
 
@@ -62,15 +62,19 @@
               </div>
             </td>
             <td>
-              <div class="view">
-                <a class="waves-effect waves-light btn" v-on:click="editBeacon(beacon)">Edit</a>
-              </div>
-              <div class="edit">
-                <a class="waves-effect waves-light btn" v-on:click="saveBeacon(beacon)">Save</a>
-              </div>
+         
              
-              <a class="waves-effect waves-light btn delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+                <div class="view">
+                  <a class="theB" v-on:click="editBeacon(beacon)">Edit</a>
+                </div>
+                
+                <div class="edit">
+                  <a class="theB" v-on:click="saveBeacon(beacon)">Save</a>
+                </div>
+          
               
+                <a class="theB delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+             
             </td>
           </tr>
         </tbody>

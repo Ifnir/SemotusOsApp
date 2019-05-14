@@ -1,5 +1,5 @@
 $danger-color: #d42727;
-$danger-color-hover: #cc4c4c;
+$danger-color-hover: #ca7070;
 
 body {
     overflow-y: hidden;
@@ -109,19 +109,39 @@ body {
   background-color: #254053;
 }
 .btn-large:hover {
-  background-color: #44647a;
-}
-// Delete
-.delete {
-  background-color: $danger-color;
-}
-.delete:hover {
-  background-color: $danger-color-hover;
+  background-color: #bdbfc0;
 }
 .divider{
   width:5px;
   height:auto;
   display:inline-block;
+}
+.theB
+{
+   display: inline-block;
+   width: 100%;       /* set to 100% */
+   height: 100%;      /* set to 100% */
+   margin-bottom: 0.5em;
+   padding-top: .6em;
+   padding-bottom: .6em;
+   color: #fff;
+   background-color: #254053;
+   border-radius: 5px;
+   border: solid #cccccc 1px;
+   box-shadow: 2px 2px 1px #888888;
+   clear:right;
+   text-align: center;
+   vertical-align: middle;
+   cursor: pointer;
+}
+.theB:hover {
+  background-color: #44647a;
+}
+.delete {
+  background-color: $danger-color;
+}
+.delete:hover {
+  background-color: $danger-color-hover;
 }
 
 [v-cloak] {
@@ -131,7 +151,8 @@ body {
   display: none;
 }
 .editing .edit {
-  display: block
+  display: block;
+  
 }
 .editing .view {
   display: none;
