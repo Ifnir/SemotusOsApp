@@ -109,15 +109,15 @@ export default new Vuex.Store({
         })
     },
     updateBeacon(context, beacon) {
-      axios.patch('/beacon_id/edit', {data: {
+      axios.post('/beacon_id/edit/' + beacon.id, {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
         attachment_key: beacon.attachment_key
-      }})
-        .then(response => {
-          context.commit('updateBeacon', response.data)
+      })
+        .then(() => {
+          context.commit('updateBeacons', beacon)
         })
         .catch(error => {
           console.log(error)
@@ -128,7 +128,7 @@ export default new Vuex.Store({
       {data: {
         id: id
       }})
-      .then(function(response) {
+      .then(() => {
         context.commit('deleteBeacons', id)
       })
       .catch(error => {
@@ -205,7 +205,7 @@ export default new Vuex.Store({
       const data = qs.stringify({
         grant_type: 'password',
         username: credentials.username,
-        password: credentials.password,
+        password: credentials.password
       })
 
       return new Promise((resolve, reject) => {

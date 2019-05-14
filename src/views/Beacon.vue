@@ -29,14 +29,48 @@
                 <input type="text" v-model="beacon.name"/>
               </div>
             </td>
-            
-            <td>{{ beacon.tag }}</td>
-            <td>{{ beacon.identifier }}</td>
-            <td>{{ beacon.attachment_key }}</td>
-            <td>{{ beacon.attachment_value }}</td>
             <td>
-                <a class="waves-effect waves-light btn" v-on:click="editBeacon(beacon)">Edit</a><div class="divider"/>
-                <a class="waves-effect waves-light btn delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+              <div class="view">
+                {{beacon.tag}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.tag"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.identifier}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.identifier"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.attachment_key}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.attachment_key"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.attachment_value}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.attachment_value"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                <a class="waves-effect waves-light btn" v-on:click="editBeacon(beacon)">Edit</a>
+              </div>
+              <div class="edit">
+                <a class="waves-effect waves-light btn" v-on:click="saveBeacon(beacon)">Save</a>
+              </div>
+             
+              <a class="waves-effect waves-light btn delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+              
             </td>
           </tr>
         </tbody>
@@ -49,12 +83,13 @@
 // @ is an alias to /src
 
 import Nav from './../components/Nav.vue';
-import { mapActions } from 'vuex'
 export default {
   name: 'beacon',
-  data: {
-    editedBeacon: null,
-    editMode: false
+  data() {
+    return {
+      editedBeacon: null,
+      editMode: false
+    }
   },
   components: {
       Nav
@@ -68,9 +103,11 @@ export default {
     }
   },
   methods: {
+    saveBeacon(beacon) {
+      this.$store.dispatch('updateBeacon', beacon)
+      this.editedBeacon = null
+    },
     editBeacon(beacon) {
-      console.log("this is jeff")
-      this.beforEditCache = beacon
       this.editedBeacon = beacon
     },
     deleteBeacon(id) {
