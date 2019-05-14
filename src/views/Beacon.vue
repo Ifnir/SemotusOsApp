@@ -20,15 +20,57 @@
         </thead>
 
         <tbody>
-          <tr v-for="beacon in anyBeacons" :key="beacon.id">
-            <td>{{ beacon.name }}</td>
-            <td>{{ beacon.tag }}</td>
-            <td>{{ beacon.identifier }}</td>
-            <td>{{ beacon.attachment_key }}</td>
-            <td>{{ beacon.attachment_value }}</td>
+          <tr v-for="beacon in anyBeacons" :key="beacon.id" :class="{editing: beacon == editedBeacon}" v-cloak>
             <td>
-                <a class="waves-effect waves-light btn">Edit</a><div class="divider"/>
-                <a class="waves-effect waves-light btn delete">Delete</a>
+              <div class="view">
+                {{beacon.name}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.name"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.tag}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.tag"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.identifier}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.identifier"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.attachment_key}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.attachment_key"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                {{beacon.attachment_value}}
+              </div>
+              <div class="edit">
+                <input type="text" v-model="beacon.attachment_value"/>
+              </div>
+            </td>
+            <td>
+              <div class="view">
+                <a class="waves-effect waves-light btn" v-on:click="editBeacon(beacon)">Edit</a>
+              </div>
+              <div class="edit">
+                <a class="waves-effect waves-light btn" v-on:click="saveBeacon(beacon)">Save</a>
+              </div>
+             
+              <a class="waves-effect waves-light btn delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+              
             </td>
           </tr>
         </tbody>
@@ -43,6 +85,12 @@
 import Nav from './../components/Nav.vue';
 export default {
   name: 'beacon',
+  data() {
+    return {
+      editedBeacon: null,
+      editMode: false
+    }
+  },
   components: {
       Nav
   },
@@ -52,6 +100,18 @@ export default {
   computed: {
     anyBeacons() {
       return this.$store.getters.allBeacons
+    }
+  },
+  methods: {
+    saveBeacon(beacon) {
+      this.$store.dispatch('updateBeacon', beacon)
+      this.editedBeacon = null
+    },
+    editBeacon(beacon) {
+      this.editedBeacon = beacon
+    },
+    deleteBeacon(id) {
+      this.$store.dispatch('deleteBeacon', id)
     }
   }
   
