@@ -12,6 +12,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 let login
+let addbeacon
 
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
@@ -24,16 +25,23 @@ ipcMain.on('login-success', (event, arg) => {
        }
   if(arg == 'logout') {
     app.exit(0)
-   
   }
 })
 
+ipcMain.on('additem', (event, arg) => {
+  if(arg == 'beacon') {
+    addbeacon.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/createbeacon')
+    addbeacon.show()
+  }
+})
 
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({ width: 1600, height: 960, frame: false, backgroundColor: '#FFF', show: false })
   // Create child browser window parent to win
   login = new BrowserWindow({ parent: win, width: 400, height: 300, frame: false, show: true })
+
+  addbeacon = new BrowserWindow({ alwaysOnTop: true , show: false })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -42,6 +50,7 @@ function createWindow () {
 
     if (!process.env.IS_TEST) win.webContents.openDevTools()
     if (!process.env.IS_TEST) login.webContents.openDevTools()
+    if (!process.env.IS_TEST) addbeacon.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
@@ -51,8 +60,6 @@ function createWindow () {
   win.on('closed', () => {
     win = null
   })
-  
-
 }
 
 

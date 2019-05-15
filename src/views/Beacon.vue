@@ -4,7 +4,7 @@
     <div class="wrapper">
       <h2>Beacon</h2>
       <hr>
-      <a class="waves-effect waves-light btn-large">Add Beacon</a>
+      <a class="waves-effect waves-light btn-large" v-on:click="addBeaconInterface()">Add Beacon</a>
       <hr>
       
       <table>
@@ -62,8 +62,6 @@
               </div>
             </td>
             <td>
-         
-             
                 <div class="view">
                   <a class="theB" v-on:click="editBeacon(beacon)">Edit</a>
                 </div>
@@ -71,10 +69,7 @@
                 <div class="edit">
                   <a class="theB" v-on:click="saveBeacon(beacon)">Save</a>
                 </div>
-          
-              
                 <a class="theB delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
-             
             </td>
           </tr>
         </tbody>
@@ -85,14 +80,13 @@
 
 <script>
 // @ is an alias to /src
-
+import { ipcRenderer } from 'electron'
 import Nav from './../components/Nav.vue';
 export default {
   name: 'beacon',
   data() {
     return {
-      editedBeacon: null,
-      editMode: false
+      editedBeacon: null
     }
   },
   components: {
@@ -107,6 +101,9 @@ export default {
     }
   },
   methods: {
+    addBeaconInterface() {
+      ipcRenderer.send('additem', 'beacon')
+    },
     saveBeacon(beacon) {
       this.$store.dispatch('updateBeacon', beacon)
       this.editedBeacon = null
@@ -118,6 +115,5 @@ export default {
       this.$store.dispatch('deleteBeacon', id)
     }
   }
-  
 }
 </script>

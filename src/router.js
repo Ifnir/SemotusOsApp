@@ -6,6 +6,7 @@ import Logout from './views/Logout.vue';
 import Beacon from './views/Beacon.vue';
 import Elder from './views/Elder.vue';
 import Check from './views/Check.vue';
+import CreateBeacon from './views/CreateBeacon.vue';
 
 Vue.use(Router)
 
@@ -41,6 +42,14 @@ export default new Router({
       path: '/check',
       name: 'check',
       component: Check,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/createbeacon',
+      name: 'createbeacon',
+      component: CreateBeacon,
       meta: {
         requiresAuth: true,
       }

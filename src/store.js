@@ -1,6 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import axios from 'axios'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 import { ipcRenderer } from 'electron'
 import qs from 'qs'
 
@@ -14,9 +14,12 @@ export default new Vuex.Store({
     token: localStorage.getItem('accesstoken') || null,
     beacons: [],
     elders: [],
-    checks: [],
+    checks: []
   },
   getters: {
+    accessToken(state) {
+      return state.token
+    },
     loggedIn(state) {
       return state.token !== null
     },
@@ -25,8 +28,7 @@ export default new Vuex.Store({
     },
     allElders(state) {
       return state.elders.data
-    }
-    ,
+    },
     allChecks(state) {
       return state.checks.data
     }
@@ -36,7 +38,7 @@ export default new Vuex.Store({
     retrieveBeacons(state, beacons){
       state.beacons = beacons
     },
-    addBeacon(state, beacon) {
+    addBeaconToMutation(state, beacon) {
       state.beacons.push({
         'id': beacon.id,
         'tag': beacon.tag,
@@ -58,6 +60,17 @@ export default new Vuex.Store({
         'attachment_value': beacon.attachment_value
       })
     },
+    updateElders(state, elder) {
+      console.log("got this far")
+      console.log(elder.name)
+      const index = state.elders.data.findIndex(item => item.id == elder.id)
+
+      state.elders.data.splice(index, 1, {
+        'name': elder.name,
+        'beaconId': elder.beaconId
+      })
+      console.log("also here")
+    },
     deleteBeacons(state, id) {
       const index = state.beacons.data.findIndex(item => item.id == id)
       state.beacons.data.splice(index, 1)
@@ -77,7 +90,6 @@ export default new Vuex.Store({
     destroyToken(state){
       state.token = null
     }
-
   },
   actions: {
 
@@ -94,15 +106,16 @@ export default new Vuex.Store({
       })
     },
     addBeacon(context, beacon) {
-      axios.post('/beacon/create', {
-        tag: beacon.tag,
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      axios.post('/beacon/create', { data: {
         name: beacon.name,
+        tag: beacon.tag,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
         attachment_key: beacon.attachment_key
-      })
-        .then(response => {
-          context.commit('addBeacon', response.data)
+      }})
+        .then(() => {
+          context.commit('addBeaconToMutation', beacon)
         })
         .catch(error => {
           console.log(error)
@@ -160,12 +173,12 @@ export default new Vuex.Store({
         })
     },
     updateElder(context, elder) {
-      axios.patch('/elder_id/edit' + elder.id,  {
+      axios.post('/elder_id/edit/' + elder.id,  {
         name: elder.name,
         beaconId: elder.beaconId
       })
-        .then(response => {
-          context.commit('updateBeacon', response.data)
+        .then(() => {
+          context.commit('updateElders', elder)
         })
         .catch(error => {
           console.log(error)
@@ -233,7 +246,6 @@ export default new Vuex.Store({
         return new Promise((resolve, reject) => {
           axios.post('/logout')
             .then(response => {
-              
               localStorage.removeItem('access_token')
               context.commit('destroyToken')
               resolve(response)

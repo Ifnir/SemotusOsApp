@@ -13,8 +13,10 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@alfsnd/vue-bootstrap-select": "^0.4.3",
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "electron-browser-storage": "^1.0.6",
     "jquery": "^3.4.1",
     "qs": "^6.7.0",
     "vue": "^2.6.10",
