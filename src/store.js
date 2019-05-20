@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import axios from 'axios';
 import { ipcRenderer } from 'electron'
 import qs from 'qs'
+import { timeout } from 'q';
 
 Vue.use(Vuex)
 
@@ -61,15 +62,11 @@ export default new Vuex.Store({
       })
     },
     updateElders(state, elder) {
-      console.log("got this far")
-      console.log(elder.name)
       const index = state.elders.data.findIndex(item => item.id == elder.id)
-
       state.elders.data.splice(index, 1, {
         'name': elder.name,
         'beaconId': elder.beaconId
       })
-      console.log("also here")
     },
     deleteBeacons(state, id) {
       const index = state.beacons.data.findIndex(item => item.id == id)
@@ -166,6 +163,7 @@ export default new Vuex.Store({
         beaconId: elder.beaconId
       })
         .then(response => {
+          timeout.sleep(20)
           context.commit('addBeacon', response.data)
         })
         .catch(error => {

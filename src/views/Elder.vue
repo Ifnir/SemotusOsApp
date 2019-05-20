@@ -54,7 +54,8 @@ export default {
       editedElder: null,
       selectedValue: null,
       attemptArray: [],
-      tempArray: []
+      tempArray: [],
+      reeee: []
     }
   },
   components: {
@@ -79,11 +80,17 @@ export default {
         this.tempArray.push({value: this.attemptArray[i].id, text: this.attemptArray[i].name})
       }
       this.editedElder = elder
+      this.reeee = this.anyElders.data
+      console.log(this.reeee)
     },
-    saveElder() {
+    saveElder() {      
+      this.reeee = this.anyElders.data
+      console.log(this.reeee)
       this.editedElder['beaconId'] = this.selectedValue['value']
       this.$store.dispatch('updateElder', this.editedElder)
       this.editedElder = null
+      this.reeee = this.anyElders.data
+      console.log(this.reeee)
     }
   }
 }
