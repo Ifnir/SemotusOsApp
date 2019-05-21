@@ -64,6 +64,7 @@ export default {
   },
   created() {
     this.$store.dispatch('retrieveElders')
+    this.$store.dispatch('retrieveBeacons')
   },
   computed: {
     anyElders() {
@@ -80,16 +81,16 @@ export default {
         this.tempArray.push({value: this.attemptArray[i].id, text: this.attemptArray[i].name})
       }
       this.editedElder = elder
-      this.reeee = this.anyElders.data
+      this.reeee = this.anyElders
       console.log(this.reeee)
     },
     saveElder() {      
-      this.reeee = this.anyElders.data
+      this.reeee = this.anyElders
       console.log(this.reeee)
       this.editedElder['beaconId'] = this.selectedValue['value']
       this.$store.dispatch('updateElder', this.editedElder)
       this.editedElder = null
-      this.reeee = this.anyElders.data
+      this.reeee = this.anyElders
       console.log(this.reeee)
     }
   }
