@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="elder in anyElders()" :key="elder.id" :class="{editing: elder == editedElder}" v-cloak>
+          <tr v-for="(elder, obj) in errElder" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
             <td>{{ elder.name }}</td>
             <td>
               <div class="view">
@@ -30,12 +30,17 @@
             </td>
             <td>
               <div class="view">
-                <a class="waves-effect waves-light btn" v-on:click="editElder(elder)">Edit</a>
+                <a class="theB" v-on:click="editElder(elder)">Edit</a>
               </div>
               <div class="edit">
-                <a class="waves-effect waves-light btn" v-on:click="saveElder()">Save</a>
+                <a class="theB" :required="selectedValue != null" v-on:click="saveElder()">Save </a>
               </div>
-                <a class="waves-effect waves-light btn delete">Delete</a>
+              <div class="view">
+                <a class="theB delete">Delete</a>
+              </div>
+              <div class="edit">
+                <a class="theB delete" v-on:click="cancelChange()">Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -56,7 +61,8 @@ export default {
       editedElder: null,
       selectedValue: null,
       filteredBeacons: [],
-      filteredArray: []
+      filteredArray: [],
+      testArray: []
     }
   },
   components: {
@@ -68,6 +74,28 @@ export default {
     this.$store.dispatch('retrieveElders')
   },
   computed: {
+    errElder() {
+      return this.$store.getters.allElders
+    }
+  },
+  watch: {
+    errElder() {
+      if (this.testArray.length <= 0) {
+        this.testArray = this.anyElders().splice(0)
+        this.$store.dispatch('retrieveElders')
+      }
+
+      var tempArray = JSON.parse(JSON.stringify(this.testArray))
+      var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
+
+      for (var i in elderArray) {
+        const index = tempArray.map(e => e.name).indexOf(elderArray[i].name);
+        if (tempArray[index].beaconId !== elderArray[i].beaconId) {
+          this.$store.dispatch('retrieveElders')
+          this.testArray = this.anyElders()
+        }
+      }
+    },
   },
   methods: {
     allBeacons() {
@@ -77,6 +105,8 @@ export default {
       return this.$store.getters.allElders
     },
     editElder(elder) {
+      this.selectedValue = null
+      this.filteredArray = []
       this.filteredBeacons = this.allBeacons().filter(o => ! this.anyElders().find(o2 => o.id === o2.beaconId))
       for (var i = 0; i < this.filteredBeacons.length; i++) {
         this.filteredArray.push({value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name})
@@ -84,10 +114,11 @@ export default {
       this.editedElder = elder
     },
     saveElder() {
-      this.editedElder['beaconId'] = this.selectedValue['value']
-      this.$store.dispatch('updateElder', this.editedElder)
-      this.$store.dispatch('retrieveBeacons')
-      this.$store.dispatch('retrieveElders')
+        this.editedElder['beaconId'] = this.selectedValue['value']
+        this.$store.dispatch('updateElder', this.editedElder)
+        this.editedElder = null
+    },
+    cancelChange() {
       this.editedElder = null
     }
   }
