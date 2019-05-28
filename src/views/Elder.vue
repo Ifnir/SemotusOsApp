@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="(elder, obj) in watchelder" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
+          <tr v-for="(elder, obj) in errElder" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
             <td>{{ elder.name }}</td>
             <td>
               <div class="view">
@@ -36,7 +36,6 @@
                 <a class="waves-effect waves-light btn" v-on:click="saveElder()">Save</a>
               </div>
                 <a class="waves-effect waves-light btn delete">Delete</a>
-                <a class="waves-effect waves-light btn" v-on:click="triggerEvent()">Simon</a>
             </td>
           </tr>
         </tbody>
@@ -57,7 +56,8 @@ export default {
       editedElder: null,
       selectedValue: null,
       filteredBeacons: [],
-      filteredArray: []
+      filteredArray: [],
+      testArray: []
     }
   },
   components: {
@@ -74,9 +74,23 @@ export default {
     }
   },
   watch: {
-    watchelder() {
-      return this.$store.getters.allElders
-    }
+    errElder() {
+      if (this.testArray.length <= 0) {
+        this.testArray = this.anyElders().splice(0)
+        this.$store.dispatch('retrieveElders')
+      }
+
+      var tempArray = JSON.parse(JSON.stringify(this.testArray))
+      var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
+
+      for (var i in elderArray) {
+        const index = tempArray.map(e => e.name).indexOf(elderArray[i].name);
+        if (tempArray[index].beaconId !== elderArray[i].beaconId) {
+          this.$store.dispatch('retrieveElders')
+          this.testArray = this.anyElders()
+        }
+      }
+    },
   },
   methods: {
     allBeacons() {
@@ -86,8 +100,9 @@ export default {
       return this.$store.getters.allElders
     },
     editElder(elder) {
-      this.filteredBeacons = this.allBeacons().filter(o => ! this.anyElders().find(o2 => o.id === o2.beaconId))
+      this.selectedValue = null
       this.filteredArray = []
+      this.filteredBeacons = this.allBeacons().filter(o => ! this.anyElders().find(o2 => o.id === o2.beaconId))
       for (var i = 0; i < this.filteredBeacons.length; i++) {
         this.filteredArray.push({value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name})
       }
@@ -98,10 +113,6 @@ export default {
       this.$store.dispatch('updateElder', this.editedElder)
       this.editedElder = null
       
-    },
-    triggerEvent(){
-      this.$forceUpdate()
-      this.$store.dispatch('retrieveElders')
     }
   }
 }
