@@ -63,6 +63,9 @@ export default new Vuex.Store({
     },
     updateElders(state, elder) {
       const index = state.elders.data.findIndex(item => item.id == elder.id)
+      /*Vue.set(state.elders.data, index, {
+        'name': elder.name,
+        'beaconId': elder.beaconId})*/
       state.elders.data.splice(index, 1, {
         'name': elder.name,
         'beaconId': elder.beaconId
