@@ -16,14 +16,16 @@
         </thead>
 
         <tbody>
-          <tr v-for="elder in anyElders" :key="elder.id" :class="{editing: elder == editedElder}" v-cloak>
+          <tr v-for="elder in anyElders()" :key="elder.id" :class="{editing: elder == editedElder}" v-cloak>
             <td>{{ elder.name }}</td>
             <td>
               <div class="view">
-                {{ elder.beacon }}
+                <template v-if="elder.beacon">
+                  {{ elder.beacon.name }}
+                </template>
               </div>
               <div class="edit">
-                <v-select :options="tempArray" v-model="selectedValue" />
+                <v-select :options="filteredArray" v-model="selectedValue"/>
               </div>
             </td>
             <td>
@@ -53,9 +55,8 @@ export default {
     return {
       editedElder: null,
       selectedValue: null,
-      attemptArray: [],
-      tempArray: [],
-      reeee: []
+      filteredBeacons: [],
+      filteredArray: []
     }
   },
   components: {
@@ -63,35 +64,31 @@ export default {
       VSelect
   },
   created() {
-    this.$store.dispatch('retrieveElders')
     this.$store.dispatch('retrieveBeacons')
+    this.$store.dispatch('retrieveElders')
   },
   computed: {
+  },
+  methods: {
+    allBeacons() {
+      return this.$store.getters.allBeacons
+    },
     anyElders() {
       return this.$store.getters.allElders
     },
-    allBeacons() {
-      return this.$store.getters.allBeacons
-    }
-  },
-  methods: {
     editElder(elder) {
-      this.attemptArray = this.$store.getters.allBeacons
-      for (var i = 0; i < this.attemptArray.length; i++) {
-        this.tempArray.push({value: this.attemptArray[i].id, text: this.attemptArray[i].name})
+      this.filteredBeacons = this.allBeacons().filter(o => ! this.anyElders().find(o2 => o.id === o2.beaconId))
+      for (var i = 0; i < this.filteredBeacons.length; i++) {
+        this.filteredArray.push({value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name})
       }
       this.editedElder = elder
-      this.reeee = this.anyElders
-      console.log(this.reeee)
     },
-    saveElder() {      
-      this.reeee = this.anyElders
-      console.log(this.reeee)
+    saveElder() {
       this.editedElder['beaconId'] = this.selectedValue['value']
       this.$store.dispatch('updateElder', this.editedElder)
+      this.$store.dispatch('retrieveBeacons')
+      this.$store.dispatch('retrieveElders')
       this.editedElder = null
-      this.reeee = this.anyElders
-      console.log(this.reeee)
     }
   }
 }
