@@ -30,12 +30,17 @@
             </td>
             <td>
               <div class="view">
-                <a class="waves-effect waves-light btn" v-on:click="editElder(elder)">Edit</a>
+                <a class="theB" v-on:click="editElder(elder)">Edit</a>
               </div>
               <div class="edit">
-                <a class="waves-effect waves-light btn" v-on:click="saveElder()">Save</a>
+                <a class="theB" :required="selectedValue != null" v-on:click="saveElder()">Save </a>
               </div>
-                <a class="waves-effect waves-light btn delete">Delete</a>
+              <div class="view">
+                <a class="theB delete">Delete</a>
+              </div>
+              <div class="edit">
+                <a class="theB delete" v-on:click="cancelChange()">Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -109,10 +114,12 @@ export default {
       this.editedElder = elder
     },
     saveElder() {
-      this.editedElder['beaconId'] = this.selectedValue['value']
-      this.$store.dispatch('updateElder', this.editedElder)
+        this.editedElder['beaconId'] = this.selectedValue['value']
+        this.$store.dispatch('updateElder', this.editedElder)
+        this.editedElder = null
+    },
+    cancelChange() {
       this.editedElder = null
-      
     }
   }
 }
