@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="elder in anyElders()" :key="elder.id" :class="{editing: elder == editedElder}" v-cloak>
+          <tr v-for="(elder, obj) in watchelder" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
             <td>{{ elder.name }}</td>
             <td>
               <div class="view">
@@ -36,6 +36,7 @@
                 <a class="waves-effect waves-light btn" v-on:click="saveElder()">Save</a>
               </div>
                 <a class="waves-effect waves-light btn delete">Delete</a>
+                <a class="waves-effect waves-light btn" v-on:click="triggerEvent()">Simon</a>
             </td>
           </tr>
         </tbody>
@@ -68,6 +69,14 @@ export default {
     this.$store.dispatch('retrieveElders')
   },
   computed: {
+    errElder() {
+      return this.$store.getters.allElders
+    }
+  },
+  watch: {
+    watchelder() {
+      return this.$store.getters.allElders
+    }
   },
   methods: {
     allBeacons() {
@@ -78,6 +87,7 @@ export default {
     },
     editElder(elder) {
       this.filteredBeacons = this.allBeacons().filter(o => ! this.anyElders().find(o2 => o.id === o2.beaconId))
+      this.filteredArray = []
       for (var i = 0; i < this.filteredBeacons.length; i++) {
         this.filteredArray.push({value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name})
       }
@@ -86,9 +96,12 @@ export default {
     saveElder() {
       this.editedElder['beaconId'] = this.selectedValue['value']
       this.$store.dispatch('updateElder', this.editedElder)
-      this.$store.dispatch('retrieveBeacons')
-      this.$store.dispatch('retrieveElders')
       this.editedElder = null
+      
+    },
+    triggerEvent(){
+      this.$forceUpdate()
+      this.$store.dispatch('retrieveElders')
     }
   }
 }

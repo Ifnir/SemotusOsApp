@@ -51,7 +51,7 @@ export default new Vuex.Store({
     },
     updateBeacons(state, beacon) {
       const index = state.beacons.data.findIndex(item => item.id == beacon.id)
-
+      
       state.beacons.data.splice(index, 1, {
         'id': beacon.id,
         'tag': beacon.tag,
