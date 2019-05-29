@@ -7,6 +7,7 @@ import Beacon from './views/Beacon.vue';
 import Elder from './views/Elder.vue';
 import Check from './views/Check.vue';
 import CreateBeacon from './views/CreateBeacon.vue';
+import CreateElder from './views/CreateElder.vue';
 
 Vue.use(Router)
 
@@ -50,6 +51,14 @@ export default new Router({
       path: '/createbeacon',
       name: 'createbeacon',
       component: CreateBeacon,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/createelder',
+      name: 'createelder',
+      component: CreateElder,
       meta: {
         requiresAuth: true,
       }

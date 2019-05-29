@@ -10,9 +10,10 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
-let login
-let addbeacon
+let win;
+let login;
+let beaconInterface;
+let elderInterface;
 
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
@@ -28,29 +29,39 @@ ipcMain.on('login-success', (event, arg) => {
   }
 })
 
-ipcMain.on('additem', (event, arg) => {
-  if(arg == 'beacon') {
-    addbeacon.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/createbeacon')
-    addbeacon.show()
+ipcMain.on('beaconInterface', (event, arg) => {
+  if (arg === 'open') {
+    beaconInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
+    beaconInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createbeacon`);
+    if (!process.env.IS_TEST) beaconInterface.webContents.openDevTools();
+  } else if (arg === 'close') {
+    beaconInterface.close();
   }
-})
+});
 
-function createWindow () {
+ipcMain.on('elderInterface', (event, arg) => {
+  if (arg === 'open') {
+    elderInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
+    elderInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createelder`);
+    if (!process.env.IS_TEST) elderInterface.webContents.openDevTools();
+  } else if (arg === 'close') {
+    elderInterface.close();
+  }
+});
+
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({ width: 1600, height: 960, frame: false, backgroundColor: '#FFF', show: false })
   // Create child browser window parent to win
   login = new BrowserWindow({ parent: win, width: 400, height: 300, frame: false, show: true })
 
-  addbeacon = new BrowserWindow({ alwaysOnTop: true , show: false })
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    login.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/login')
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    login.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/login`);
 
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
-    if (!process.env.IS_TEST) login.webContents.openDevTools()
-    if (!process.env.IS_TEST) addbeacon.webContents.openDevTools()
+    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    if (!process.env.IS_TEST) login.webContents.openDevTools();
   } else {
     createProtocol('app')
     // Load the index.html when not in development

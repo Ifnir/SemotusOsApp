@@ -26,7 +26,7 @@
             </div>
             <div class="center-align">
               <button class="btn btn-default" id="btn-login">Create Beacon</button><br>
-              <a href="#"><p id="close-button">Cancel</p></a>
+              <a href="#" v-on:click="closeBeaconInterface()"><p id="close-button">Cancel</p></a>
             </div>
         </form>
     </div>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 export default {
   name: 'createbeacon',
   components: {
@@ -49,6 +50,9 @@ export default {
     }
   },
   methods: {
+    closeBeaconInterface() {
+      ipcRenderer.send('beaconInterface', 'close')
+    },
     createBeacon() {
       this.$store.dispatch('addBeacon',
       {
@@ -58,6 +62,7 @@ export default {
         attachment_key: this.attachKey,
         attachment_value: this.attachValue
       })
+      this.closeBeaconInterface()
     }
   }
 }

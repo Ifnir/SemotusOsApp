@@ -15,24 +15,24 @@ export default new Vuex.Store({
     token: localStorage.getItem('accesstoken') || null,
     beacons: [],
     elders: [],
-    checks: []
+    checks: [],
   },
   getters: {
     accessToken(state) {
-      return state.token
+      return state.token;
     },
     loggedIn(state) {
-      return state.token !== null
+      return state.token !== null;
     },
     allBeacons(state) {
-      return state.beacons.data
+      return state.beacons.data;
     },
     allElders(state) {
-      return state.elders.data
+      return state.elders.data;
     },
     allChecks(state) {
-      return state.checks.data
-    }
+      return state.checks.data;
+    },
   },
   mutations: {
     // ---------- Beacons
@@ -75,6 +75,10 @@ export default new Vuex.Store({
       const index = state.beacons.data.findIndex(item => item.id == id)
       state.beacons.data.splice(index, 1)
     },
+    deleteElder(state, id) {
+      const index = state.elders.data.findIndex(item => item.id == id)
+      state.beacons.data.splice(index, 1)
+    },
     // ---------- Elders
     retrieveElders(state, elders) {
       state.elders = elders
@@ -106,14 +110,15 @@ export default new Vuex.Store({
       })
     },
     addBeacon(context, beacon) {
+      console.log(beacon.tag)
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-      axios.post('/beacon/create', { data: {
+      axios.post('/beacon/create', {
         name: beacon.name,
         tag: beacon.tag,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
         attachment_key: beacon.attachment_key
-      }})
+      })
         .then(() => {
           context.commit('addBeaconToMutation', beacon)
         })
@@ -186,9 +191,12 @@ export default new Vuex.Store({
         })
     },
     deleteElder(context, id) {
-      axios.delete('/elder_id' + id)
+      axios.delete('/elder_id',
+      {data: {
+        id: id
+      }})
       .then(() => {
-        context.commit('deleteBeacon', id)
+        context.commit('deleteElder', id)
       })
       .catch(error => {
         console.log(error)
