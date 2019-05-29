@@ -4,7 +4,7 @@
     <div class="wrapper">
       <h2>Beacon</h2>
       <hr>
-      <a class="waves-effect waves-light btn-large" v-on:click="addBeaconInterface()">Add Beacon</a>
+      <a class="waves-effect waves-light btn-large" v-on:click="openBeaconInterface()">Add Beacon</a>
       <hr>
       
       <table>
@@ -86,7 +86,8 @@ export default {
   name: 'beacon',
   data() {
     return {
-      editedBeacon: null
+      editedBeacon: null,
+      tempArray: []
     }
   },
   components: {
@@ -100,9 +101,28 @@ export default {
       return this.$store.getters.allBeacons
     }
   },
+  watch: {
+    anyBeacons() {
+      if (this.tempArray.length <= 0) {
+        this.tempArray = this.$store.getters.allBeacons.splice(0)
+        this.$store.dispatch('retrieveBeacons')
+        console.log("reeee")
+      }
+      console.log("test")
+      var tempArray = JSON.parse(JSON.stringify(this.tempArray))
+      var elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons))
+      console.log(tempArray, tempArray.length)
+      console.log(elderArray, elderArray.length)
+      if (elderArray.length > tempArray.length) {
+        console.log("got here")
+        this.$store.dispatch('retrieveBeacons')
+        this.tempArray = this.$store.getters.allBeacons
+      }
+    }
+  },
   methods: {
-    addBeaconInterface() {
-      ipcRenderer.send('additem', 'beacon')
+    openBeaconInterface() {
+      ipcRenderer.send('beaconInterface', 'open')
     },
     saveBeacon(beacon) {
       this.$store.dispatch('updateBeacon', beacon)

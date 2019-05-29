@@ -4,7 +4,7 @@
     <div class="wrapper">
       <h2>Elder</h2>
       <hr>
-      <a class="waves-effect waves-light btn-large">Add New</a>
+      <a class="waves-effect waves-light btn-large" v-on:click="openElderInterface()">Add New</a>
       <hr>
 
       <table>
@@ -36,7 +36,7 @@
                 <a class="theB" :required="selectedValue != null" v-on:click="saveElder()">Save </a>
               </div>
               <div class="view">
-                <a class="theB delete">Delete</a>
+                <a class="theB delete" v-on:click="deleteElder(elder.id)">Delete</a>
               </div>
               <div class="edit">
                 <a class="theB delete" v-on:click="cancelChange()">Cancel</a>
@@ -51,6 +51,7 @@
 
 <script>
 // @ is an alias to /src
+import { ipcRenderer } from 'electron'
 import Nav from './../components/Nav.vue';
 import VSelect from '@alfsnd/vue-bootstrap-select';
 
@@ -84,7 +85,7 @@ export default {
         this.testArray = this.anyElders().splice(0)
         this.$store.dispatch('retrieveElders')
       }
-
+    console.log("test")
       var tempArray = JSON.parse(JSON.stringify(this.testArray))
       var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
 
@@ -120,6 +121,13 @@ export default {
     },
     cancelChange() {
       this.editedElder = null
+    },
+    deleteElder(id) {
+      this.$store.dispatch('deleteElder', id)
+      this.$store.dispatch('retrieveElders')
+    },
+    openElderInterface() {
+      ipcRenderer.send('elderInterface', 'open')
     }
   }
 }
