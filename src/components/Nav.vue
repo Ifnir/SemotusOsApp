@@ -16,6 +16,7 @@
             <li><router-link to="/elder">Elder</router-link></li>
             <li><router-link to="/beacon">Beacon</router-link></li>
             <li><router-link to="/check">Check</router-link></li>
+            <li><router-link to="/users">Users</router-link></li>
             <li><div class="divider"></div></li>
             <li><a class="subheader">Subheader</a></li>
             <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>

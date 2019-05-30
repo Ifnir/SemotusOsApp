@@ -6,10 +6,13 @@ import Logout from './views/Logout.vue';
 import Beacon from './views/Beacon.vue';
 import Elder from './views/Elder.vue';
 import Check from './views/Check.vue';
+import Users from './views/Users.vue';
 import CreateBeacon from './views/CreateBeacon.vue';
 import CreateElder from './views/CreateElder.vue';
+import CreateUser from './views/CreateUser.vue';
 
-Vue.use(Router)
+
+Vue.use(Router);
 
 export default new Router({
   //mode: 'history',
@@ -64,11 +67,27 @@ export default new Router({
       }
     },
     {
+      path: '/createuser',
+      name: 'createuser',
+      component: CreateUser,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login,
       meta: {
         requiresVisitor: true,
+      }
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: Users,
+      meta: {
+        requiresAuth: true,
       }
     },
     {

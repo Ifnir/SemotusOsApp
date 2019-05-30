@@ -14,6 +14,7 @@ let win;
 let login;
 let beaconInterface;
 let elderInterface;
+let userInterface;
 
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
@@ -46,6 +47,15 @@ ipcMain.on('elderInterface', (event, arg) => {
     if (!process.env.IS_TEST) elderInterface.webContents.openDevTools();
   } else if (arg === 'close') {
     elderInterface.close();
+  }
+});
+ipcMain.on('userInterface', (event, arg) => {
+  if (arg === 'open') {
+    userInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
+    userInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createuser`);
+    if (!process.env.IS_TEST) userInterface.webContents.openDevTools();
+  } else if (arg === 'close') {
+    userInterface.close();
   }
 });
 
