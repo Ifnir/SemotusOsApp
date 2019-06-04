@@ -111,7 +111,6 @@ export default {
         this.testArray = this.anyElders().splice(0)
         this.$store.dispatch('retrieveElders')
       }
-    console.log("test")
       var tempArray = JSON.parse(JSON.stringify(this.testArray))
       var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
 
@@ -156,7 +155,6 @@ export default {
       ipcRenderer.send('elderInterface', 'open')
     },
      setPage(pageNumber) {
-      console.log("Pagenum: " + pageNumber)
       this.currentPage = pageNumber
     },
   }

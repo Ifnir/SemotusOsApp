@@ -103,7 +103,6 @@ export default {
   },
   created() {
     this.$store.dispatch('retrieveBeacons')
-    console.log("curentpage: " + this.currentPage)
   },
   computed: {
     anyBeacons() {
@@ -133,15 +132,12 @@ export default {
       if (this.tempArray.length <= 0) {
         this.tempArray = this.$store.getters.allBeacons.splice(0)
         this.$store.dispatch('retrieveBeacons')
-        console.log("reeee")
       }
-      console.log("test")
+      
       var tempArray = JSON.parse(JSON.stringify(this.tempArray))
       var elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons))
-      console.log(tempArray, tempArray.length)
-      console.log(elderArray, elderArray.length)
+     
       if (elderArray.length > tempArray.length) {
-        console.log("got here")
         this.$store.dispatch('retrieveBeacons')
         this.tempArray = this.$store.getters.allBeacons
       }
@@ -149,7 +145,7 @@ export default {
   },
   methods: {
     setPage(pageNumber) {
-      console.log("Pagenum: " + pageNumber)
+      
       this.currentPage = pageNumber
     },
     openBeaconInterface() {

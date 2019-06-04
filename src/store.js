@@ -110,7 +110,6 @@ export default new Vuex.Store({
       })
     },
     addBeacon(context, beacon) {
-      console.log(beacon.tag)
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       axios.post('/beacon/create', {
         name: beacon.name,

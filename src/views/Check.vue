@@ -75,7 +75,6 @@ export default {
   },
   methods: {
     setPage(pageNumber) {
-      console.log("Pagenum: " + pageNumber)
       this.currentPage = pageNumber
     },
   }
