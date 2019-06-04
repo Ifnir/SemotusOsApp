@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     closeElderInterface() {
-      console.log("hiiiii", this.$store.getters.filteredElder)
+      
       //ipcRenderer.send('elderInterface', 'close')
     },
     createElder() {

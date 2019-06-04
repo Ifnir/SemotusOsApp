@@ -16,7 +16,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="(elder, obj) in errElder" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
+          <tr v-for="(elder, obj) in paginate" :key="obj.id" :class="{editing: elder == editedElder}" v-cloak>
             <td>{{ elder.name }}</td>
             <td>
               <div class="view">
@@ -45,6 +45,11 @@
           </tr>
         </tbody>
       </table>
+       <ul>
+    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
+    <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+    </li>
+    </ul>
     </div>
   </div>
 </template>
@@ -63,7 +68,10 @@ export default {
       selectedValue: null,
       filteredBeacons: [],
       filteredArray: [],
-      testArray: []
+      testArray: [],
+      currentPage: 0,
+      itemsPerPage: 4,
+      resultCount: 0,
     }
   },
   components: {
@@ -77,6 +85,24 @@ export default {
   computed: {
     errElder() {
       return this.$store.getters.allElders
+    },
+    totalPages() {
+      return Math.ceil(this.resultCount / this.itemsPerPage)
+    },
+    paginate() {
+      if (!this.errElder || this.errElder.length !== this.errElder.length) {
+                return
+          }
+          
+            if(this.currentPage == 0) {
+              this.currentPage = 1
+            }
+            this.resultCount = this.errElder.length
+            if (this.currentPage >= this.totalPages) {
+              this.currentPage = this.totalPages
+            }
+            var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+            return this.errElder.slice(index, index + this.itemsPerPage)
     }
   },
   watch: {
@@ -85,7 +111,6 @@ export default {
         this.testArray = this.anyElders().splice(0)
         this.$store.dispatch('retrieveElders')
       }
-    console.log("test")
       var tempArray = JSON.parse(JSON.stringify(this.testArray))
       var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
 
@@ -128,7 +153,10 @@ export default {
     },
     openElderInterface() {
       ipcRenderer.send('elderInterface', 'open')
-    }
+    },
+     setPage(pageNumber) {
+      this.currentPage = pageNumber
+    },
   }
 }
 </script>
