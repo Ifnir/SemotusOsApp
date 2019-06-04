@@ -132,7 +132,14 @@ export default {
       this.editedBeacon = beacon
     },
     deleteBeacon(id) {
-      this.$store.dispatch('deleteBeacon', id)
+      if(confirm({
+        title: "test",
+        message: "Ytest",
+        okButtonText: "testtshtxt",
+        cancelButtonText: "Your yjewjyt"
+        })) {
+        this.$store.dispatch('deleteBeacon', id)
+      }
     }
   }
 }

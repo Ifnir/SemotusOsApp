@@ -114,6 +114,7 @@ export default new Vuex.Store({
     },
     // ---------- Checks
     retrieveChecks(state, checks) {
+      console.log(checks)
       state.checks = checks
     },
     // Token
