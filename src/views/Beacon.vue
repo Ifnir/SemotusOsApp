@@ -6,7 +6,7 @@
       <hr>
       <a class="waves-effect waves-light btn-large" v-on:click="openBeaconInterface()">Add Beacon</a>
       <hr>
-      
+  
       <table>
         <thead>
           <tr>
@@ -20,7 +20,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="beacon in anyBeacons" :key="beacon.id" :class="{editing: beacon == editedBeacon}" v-cloak>
+          <tr v-for="beacon in paginate" :key="beacon.id" :class="{editing: beacon == editedBeacon}" v-cloak>
             <td>
               <div class="view">
                 {{beacon.name}}
@@ -74,6 +74,11 @@
           </tr>
         </tbody>
       </table>
+     <ul>
+    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
+    <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+    </li>
+    </ul>
     </div>
   </div>
 </template>
@@ -85,9 +90,12 @@ import Nav from './../components/Nav.vue';
 export default {
   name: 'beacon',
   data() {
-    return {
+    return {     
       editedBeacon: null,
-      tempArray: []
+      tempArray: [],
+      currentPage: 0,
+      itemsPerPage: 5,
+      resultCount: 0,
     }
   },
   components: {
@@ -95,10 +103,29 @@ export default {
   },
   created() {
     this.$store.dispatch('retrieveBeacons')
+    console.log("curentpage: " + this.currentPage)
   },
   computed: {
     anyBeacons() {
       return this.$store.getters.allBeacons
+    },
+    totalPages() {
+      return Math.ceil(this.resultCount / this.itemsPerPage)
+    },
+    paginate() {
+      if (!this.anyBeacons || this.anyBeacons.length !== this.anyBeacons.length) {
+                return
+          }
+          
+            if(this.currentPage == 0) {
+              this.currentPage = 1
+            }
+            this.resultCount = this.anyBeacons.length
+            if (this.currentPage >= this.totalPages) {
+              this.currentPage = this.totalPages
+            }
+            var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+            return this.anyBeacons.slice(index, index + this.itemsPerPage)
     }
   },
   watch: {
@@ -121,6 +148,10 @@ export default {
     }
   },
   methods: {
+    setPage(pageNumber) {
+      console.log("Pagenum: " + pageNumber)
+      this.currentPage = pageNumber
+    },
     openBeaconInterface() {
       ipcRenderer.send('beaconInterface', 'open')
     },
@@ -134,6 +165,6 @@ export default {
     deleteBeacon(id) {
       this.$store.dispatch('deleteBeacon', id)
     }
-  }
+  },
 }
 </script>
