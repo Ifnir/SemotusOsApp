@@ -124,9 +124,12 @@ export default {
     cancelChange() {
       this.editedElder = null
     },
+
     deleteElder(id) {
-      this.$store.dispatch('deleteElder', id)
-      this.$store.dispatch('retrieveElders')
+      if (confirm("Are you sure?")) {
+        this.$store.dispatch('deleteElder', id)
+        this.$store.dispatch('retrieveElders')
+      }
     },
     openElderInterface() {
       ipcRenderer.send('elderInterface', 'open')
