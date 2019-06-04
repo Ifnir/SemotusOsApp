@@ -15,7 +15,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="check in anyChecks" :key="check.id">
+          <tr v-for="check in paginate" :key="check.id">
             <td>{{ check.elders.name }}</td>
             <td>{{ check.users.username }}</td>
             <td>{{ check.timestamp}}</td>
@@ -23,6 +23,11 @@
           </tr>
         </tbody>
       </table>
+      <ul>
+    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
+    <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
+    </li>
+    </ul>
     </div>
   </div>
 </template>
@@ -32,6 +37,13 @@
  import Nav from './../components/Nav.vue';
 export default {
   name: 'check',
+  data() {
+    return {     
+      currentPage: 0,
+      itemsPerPage: 10,
+      resultCount: 0,
+    }
+  },
   components: {
       Nav
   },
@@ -42,7 +54,30 @@ export default {
     anyChecks() {
       console.log(this.$store.getters.allChecks)
       return this.$store.getters.allChecks
+    },
+    totalPages() {
+      return Math.ceil(this.resultCount / this.itemsPerPage)
+    },
+    paginate() {
+      if (!this.anyChecks || this.anyChecks.length !== this.anyChecks.length) {
+                return
+          }
+          
+            if(this.currentPage == 0) {
+              this.currentPage = 1
+            }
+            this.resultCount = this.anyChecks.length
+            if (this.currentPage >= this.totalPages) {
+              this.currentPage = this.totalPages
+            }
+            var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
+            return this.anyChecks.slice(index, index + this.itemsPerPage)
     }
+  },
+  methods: {
+    setPage(pageNumber) {
+      this.currentPage = pageNumber
+    },
   }
 }
 </script>
