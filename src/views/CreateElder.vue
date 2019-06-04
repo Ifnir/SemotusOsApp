@@ -11,7 +11,6 @@
             <div class="form-group">
               <label for="tag">Beacon:</label>
               <v-select :options="filteredArray" v-model="beacon"/>
-              <!--<input type="text" class="form-control" id="txtTag" v-model="tag" required>-->
             </div>
             <div class="center-align">
               <button class="btn btn-default" id="btn-login">Create Elder</button><br>
@@ -33,29 +32,44 @@ export default {
   data() {
     return {
       name: '',
-      beacon: ''
+      beacon: '',
+      filteredArray: [],
+      filteredBeacons: []
     }
   },
   components: {
       VSelect
   },
+  created() {
+    this.$store.dispatch('retrieveBeacons')
+    setTimeout(()=>{
+      this.createFilteredArray()
+    },1000);
+  },
   computed: {
-    filteredArray() {
-      return this.$store.getters.filteredElder
-    }
   },
   methods: {
+    beacons() {
+      return this.$store.getters.allBeacons
+    },
     closeElderInterface() {
-      
-      //ipcRenderer.send('elderInterface', 'close')
+      ipcRenderer.send('elderInterface', 'close')
     },
     createElder() {
       this.$store.dispatch('addElder',
       {
         name: this.name,
-        beaconId: this.tag
+        beaconId: this.beacon.value
       })
       this.closeElderInterface()
+    },
+    createFilteredArray() {
+      this.filteredArray = []
+      this.filteredBeacons = this.beacons().filter(o => ! this.beacons().find(o2 => o.id === o2.beaconId))
+      console.log(this.filteredBeacons)
+      for (var i = 0; i < this.filteredBeacons.length; i++) {
+        this.filteredArray.push({value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name})
+      }
     }
   }
 }

@@ -159,7 +159,9 @@ export default {
       this.editedBeacon = beacon
     },
     deleteBeacon(id) {
-      this.$store.dispatch('deleteBeacon', id)
+      if(confirm("Are you sure?")) {
+        this.$store.dispatch('deleteBeacon', id)
+      }
     }
   },
 }

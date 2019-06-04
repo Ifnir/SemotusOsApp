@@ -4,7 +4,7 @@
     <div class="wrapper">
       <h2>Elder</h2>
       <hr>
-      <a class="waves-effect waves-light btn-large" v-on:click="openElderInterface()">Add New</a>
+      <a class="waves-effect waves-light btn-large" v-on:click="openElderInterface()">Add Elder</a>
       <hr>
 
       <table>
@@ -107,21 +107,24 @@ export default {
   },
   watch: {
     errElder() {
-      if (this.testArray.length <= 0) {
+      if (this.testArray.length <= 0 && this.anyElders().length > 0) {
         this.testArray = this.anyElders().splice(0)
         this.$store.dispatch('retrieveElders')
       }
       var tempArray = JSON.parse(JSON.stringify(this.testArray))
       var elderArray = JSON.parse(JSON.stringify(this.anyElders()))
+      console.log("tempArray", tempArray, "elderArray", elderArray)
 
       for (var i in elderArray) {
         const index = tempArray.map(e => e.name).indexOf(elderArray[i].name);
         if (tempArray[index].beaconId !== elderArray[i].beaconId) {
           this.$store.dispatch('retrieveElders')
           this.testArray = this.anyElders()
-        }
+        
       }
-    },
+    }
+  },
+    deep: true
   },
   methods: {
     allBeacons() {
@@ -147,9 +150,12 @@ export default {
     cancelChange() {
       this.editedElder = null
     },
+
     deleteElder(id) {
-      this.$store.dispatch('deleteElder', id)
-      this.$store.dispatch('retrieveElders')
+      if (confirm("Are you sure?")) {
+        this.$store.dispatch('deleteElder', id)
+        this.$store.dispatch('retrieveElders')
+      }
     },
     openElderInterface() {
       ipcRenderer.send('elderInterface', 'open')

@@ -16,6 +16,7 @@ export default new Vuex.Store({
     beacons: [],
     elders: [],
     checks: [],
+    users: [],
   },
   getters: {
     accessToken(state) {
@@ -33,9 +34,15 @@ export default new Vuex.Store({
     allChecks(state) {
       return state.checks.data;
     },
+    allUsers(state) {
+      return state.users.data;
+    },
   },
   mutations: {
     // ---------- Beacons
+    retrieveUsers(state, users){
+      state.users = users
+    },
     retrieveBeacons(state, beacons){
       state.beacons = beacons
     },
@@ -47,6 +54,18 @@ export default new Vuex.Store({
         'name': beacon.name,
         'attachment_key': beacon.attachment_key,
         'attachment_value': beacon.attachment_value
+      })
+    },
+    addUser(state, user) {
+      state.users.push({
+        'name': user.username,
+        'password': user.password,
+      })
+    },
+    addElder(state, elder) {
+      state.elders.push({
+        'name': elder.name,
+        'beaconId': elder.beaconId,
       })
     },
     updateBeacons(state, beacon) {
@@ -71,13 +90,23 @@ export default new Vuex.Store({
         'beaconId': elder.beaconId
       })
     },
+    updateUser(state, user) {
+      const index = state.users.data.findIndex(item => item.id == user.id)
+      state.users.data.splice(index, 1, {
+        'username': user.username,
+      })
+    },
+    deleteUser(state, id) {
+      const index = state.users.data.findIndex(item => item.id == id)
+      state.users.data.splice(index, 1)
+    },
     deleteBeacons(state, id) {
       const index = state.beacons.data.findIndex(item => item.id == id)
       state.beacons.data.splice(index, 1)
     },
     deleteElder(state, id) {
       const index = state.elders.data.findIndex(item => item.id == id)
-      state.beacons.data.splice(index, 1)
+      state.elders.data.splice(index, 1)
     },
     // ---------- Elders
     retrieveElders(state, elders) {
@@ -85,6 +114,7 @@ export default new Vuex.Store({
     },
     // ---------- Checks
     retrieveChecks(state, checks) {
+      console.log(checks)
       state.checks = checks
     },
     // Token
@@ -108,6 +138,19 @@ export default new Vuex.Store({
       .catch(err => {
         console.log(err)
       })
+    },
+    createUser(context, user) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+      axios.post('/user/create', {
+        username: user.username,
+        password: user.password
+      })
+        .then(() => {
+          context.commit('addUser', user)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     addBeacon(context, beacon) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -152,6 +195,18 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    deleteUser(context, id) {
+      axios.delete('/user_id',
+      {data: {
+        id: id
+      }})
+      .then(() => {
+        context.commit('deleteUser', id)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     // -------------------------------------------------------Elders
     retrieveElders(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -164,14 +219,14 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
-    addElders(context, elder) {
+    addElder(context, elder) {
+      console.log(elder)
       axios.post('/elder/create', {
         name: elder.name,
-        beaconId: elder.beaconId
+        beaconId: elder.beaconId,
       })
         .then(response => {
-          timeout.sleep(20)
-          context.commit('addBeacon', response.data)
+          context.commit('addElder', response.data)
         })
         .catch(error => {
           console.log(error)
@@ -184,6 +239,17 @@ export default new Vuex.Store({
       })
         .then(() => {
           context.commit('updateElders', elder)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    updateUser(context, user) {
+      axios.post('/user_id/edit/' + user.id,  {
+        username: user.username
+      })
+        .then(() => {
+          context.commit('updateUser', user)
         })
         .catch(error => {
           console.log(error)
@@ -266,7 +332,18 @@ export default new Vuex.Store({
         })
       }
 
-    }
+    },
+    retrieveUsers(context) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
+
+      axios.get('/users')
+      .then(response => {
+        context.commit('retrieveUsers', response.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
 
   }
 })

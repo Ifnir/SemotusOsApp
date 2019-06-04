@@ -52,6 +52,7 @@ export default {
   },
   computed: {
     anyChecks() {
+      console.log(this.$store.getters.allChecks)
       return this.$store.getters.allChecks
     },
     totalPages() {
