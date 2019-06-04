@@ -58,8 +58,14 @@ export default new Vuex.Store({
     },
     addUser(state, user) {
       state.users.push({
-        'username': user.username,
+        'name': user.username,
         'password': user.password,
+      })
+    },
+    addElder(state, elder) {
+      state.elders.push({
+        'name': elder.name,
+        'beaconId': elder.beaconId,
       })
     },
     updateBeacons(state, beacon) {
@@ -100,7 +106,7 @@ export default new Vuex.Store({
     },
     deleteElder(state, id) {
       const index = state.elders.data.findIndex(item => item.id == id)
-      state.beacons.data.splice(index, 1)
+      state.elders.data.splice(index, 1)
     },
     // ---------- Elders
     retrieveElders(state, elders) {
@@ -213,14 +219,14 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
-    addElders(context, elder) {
+    addElder(context, elder) {
+      console.log(elder)
       axios.post('/elder/create', {
         name: elder.name,
-        beaconId: elder.beaconId
+        beaconId: elder.beaconId,
       })
         .then(response => {
-          timeout.sleep(20)
-          context.commit('addBeacon', response.data)
+          context.commit('addElder', response.data)
         })
         .catch(error => {
           console.log(error)
