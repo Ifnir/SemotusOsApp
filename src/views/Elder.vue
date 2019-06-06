@@ -90,11 +90,11 @@ export default {
       return Math.ceil(this.resultCount / this.itemsPerPage)
     },
     paginate() {
-      if (!this.errElder || this.errElder.length !== this.errElder.length) {
+      if (!this.errElder || this.errElder.length <= 0) {
                 return
           }
           
-            if(this.currentPage == 0) {
+            if (this.currentPage == 0) {
               this.currentPage = 1
             }
             this.resultCount = this.errElder.length
