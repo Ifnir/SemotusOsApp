@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     beacons: [],
     elders: [],
     checks: [],
+    searchKey: null,
   },
   getters: {
     accessToken(state) {
@@ -102,12 +104,12 @@ export default new Vuex.Store({
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/beacon')
-      .then(response => {
-        context.commit('retrieveBeacons', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        .then(response => {
+          context.commit('retrieveBeacons', response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     addBeacon(context, beacon) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
@@ -142,27 +144,29 @@ export default new Vuex.Store({
     },
     deleteBeacon(context, id) {
       axios.delete('/beacon_id',
-      {data: {
-        id: id
-      }})
-      .then(() => {
-        context.commit('deleteBeacons', id)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        {
+          data: {
+            id: id
+          }
+        })
+        .then(() => {
+          context.commit('deleteBeacons', id)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // -------------------------------------------------------Elders
     retrieveElders(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/elders')
-      .then(response => {
-        context.commit('retrieveElders', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        .then(response => {
+          context.commit('retrieveElders', response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     addElders(context, elder) {
       axios.post('/elder/create', {
@@ -191,27 +195,29 @@ export default new Vuex.Store({
     },
     deleteElder(context, id) {
       axios.delete('/elder_id',
-      {data: {
-        id: id
-      }})
-      .then(() => {
-        context.commit('deleteElder', id)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        {
+          data: {
+            id: id
+          }
+        })
+        .then(() => {
+          context.commit('deleteElder', id)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // --------------------------------------------------------Checks
     retrieveChecks(context) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
 
       axios.get('/check_ins')
-      .then(response => {
-        context.commit('retrieveChecks', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        .then(response => {
+          context.commit('retrieveChecks', response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     //Token
     retrieveToken(context, credentials){

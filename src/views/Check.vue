@@ -4,6 +4,7 @@
     <div class="wrapper">
       <h2>Check</h2>
       <hr>
+      <input type="text" v-model="searchKey" placeholder="Search timestamp.."/>
       <table>
         <thead>
           <tr>
@@ -28,6 +29,7 @@
     <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
     </li>
     </ul>
+  
     </div>
   </div>
 </template>
@@ -35,6 +37,7 @@
 <script>
 // @ is an alias to /src
  import Nav from './../components/Nav.vue';
+import { setTimeout } from 'timers';
 export default {
   name: 'check',
   data() {
@@ -42,6 +45,7 @@ export default {
       currentPage: 0,
       itemsPerPage: 10,
       resultCount: 0,
+      searchKey: '',
     }
   },
   components: {
@@ -61,6 +65,11 @@ export default {
       if (!this.anyChecks || this.anyChecks.length !== this.anyChecks.length) {
                 return
           }
+           const search = this.searchKey.toLowerCase().trim();
+
+            if (search) {
+              return this.anyChecks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
+            }
           
             if(this.currentPage == 0) {
               this.currentPage = 1
@@ -71,6 +80,15 @@ export default {
             }
             var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
             return this.anyChecks.slice(index, index + this.itemsPerPage)
+
+            
+    },
+    filtered() {
+    const search = this.searchKey.toLowerCase().trim();
+
+      if (!search) return this.anyChecks;
+
+      return this.anyChecks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
     }
   },
   methods: {
