@@ -1,13 +1,15 @@
+/* eslint-disable no-undef */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-import { ipcRenderer } from 'electron'
-import qs from 'qs'
-import { timeout } from 'q';
+import { ipcRenderer } from 'electron';
+import qs from 'qs';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://localhost:3000';
 
 
 export default new Vuex.Store({
@@ -40,105 +42,96 @@ export default new Vuex.Store({
   },
   mutations: {
     // ---------- Beacons
-    retrieveUsers(state, users){
-      state.users = users
+    retrieveUsers(state, users) {
+      state.users = users;
     },
-    retrieveBeacons(state, beacons){
-      state.beacons = beacons
+    retrieveBeacons(state, beacons) {
+      state.beacons = beacons;
     },
     addBeaconToMutation(state, beacon) {
       state.beacons.push({
-        'id': beacon.id,
-        'tag': beacon.tag,
-        'identifier': beacon.identifier,
-        'name': beacon.name,
-        'attachment_key': beacon.attachment_key,
-        'attachment_value': beacon.attachment_value
-      })
+        id: beacon.id,
+        tag: beacon.tag,
+        identifier: beacon.identifier,
+        name: beacon.name,
+        attachment_key: beacon.attachment_key,
+        attachment_value: beacon.attachment_value,
+      });
     },
     addUser(state, user) {
       state.users.push({
-        'name': user.username,
-        'password': user.password,
-      })
+        name: user.username,
+        password: user.password,
+      });
     },
     addElder(state, elder) {
-      console.log(elder)
       state.elders.push({
-        'name': elder.name,
-        'beaconId': elder.beaconId,
-      })
+        name: elder.name,
+        beaconId: elder.beaconId,
+      });
     },
     updateBeacons(state, beacon) {
-      const index = state.beacons.data.findIndex(item => item.id == beacon.id)
-      
+      const index = state.beacons.data.findIndex(item => item.id === beacon.id);
       state.beacons.data.splice(index, 1, {
-        'id': beacon.id,
-        'tag': beacon.tag,
-        'identifier': beacon.identifier,
-        'name': beacon.name,
-        'attachment_key': beacon.attachment_key,
-        'attachment_value': beacon.attachment_value
-      })
+        id: beacon.id,
+        tag: beacon.tag,
+        identifier: beacon.identifier,
+        name: beacon.name,
+        attachment_key: beacon.attachment_key,
+        attachment_value: beacon.attachment_value,
+      });
     },
     updateElders(state, elder) {
-      const index = state.elders.data.findIndex(item => item.id == elder.id)
-      /*Vue.set(state.elders.data, index, {
-        'name': elder.name,
-        'beaconId': elder.beaconId})*/
+      const index = state.elders.data.findIndex(item => item.id === elder.id);
       state.elders.data.splice(index, 1, {
-        'name': elder.name,
-        'beaconId': elder.beaconId
-      })
+        name: elder.name,
+        beaconId: elder.beaconId,
+      });
     },
     updateUser(state, user) {
-      const index = state.users.data.findIndex(item => item.id == user.id)
+      const index = state.users.data.findIndex(item => item.id === user.id);
       state.users.data.splice(index, 1, {
-        'username': user.username,
-      })
+        username: user.username,
+      });
     },
     deleteUser(state, id) {
-      const index = state.users.data.findIndex(item => item.id == id)
-      state.users.data.splice(index, 1)
+      const index = state.users.data.findIndex(item => item.id === id);
+      state.users.data.splice(index, 1);
     },
     deleteBeacons(state, id) {
-      const index = state.beacons.data.findIndex(item => item.id == id)
-      state.beacons.data.splice(index, 1)
+      const index = state.beacons.data.findIndex(item => item.id === id);
+      state.beacons.data.splice(index, 1);
     },
     deleteElder(state, id) {
-      const index = state.elders.data.findIndex(item => item.id == id)
-      state.elders.data.splice(index, 1)
+      const index = state.elders.data.findIndex(item => item.id === id);
+      state.elders.data.splice(index, 1);
     },
     // ---------- Elders
     retrieveElders(state, elders) {
-      state.elders = elders
+      state.elders = elders;
     },
     // ---------- Checks
     retrieveChecks(state, checks) {
-      console.log(checks)
-      state.checks = checks
+      state.checks = checks;
     },
     // Token
     retrieveToken(state, token) {
-      state.token = token
+      state.token = token;
     },
-    destroyToken(state){
-      state.token = null
-    }
+    destroyToken(state) {
+      state.token = null;
+    },
   },
   actions: {
 
     // -----------------------------------------------------Beacons
     retrieveBeacons(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-      axios.get('/beacon')
-      .then(response => {
-        context.commit('retrieveBeacons', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      axios.get('/beacon').then((response) => {
+        context.commit('retrieveBeacons', response.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     createUser(context, user) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
@@ -248,81 +241,66 @@ export default new Vuex.Store({
     },
     // --------------------------------------------------------Checks
     retrieveChecks(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-      axios.get('/check_ins')
-      .then(response => {
-        context.commit('retrieveChecks', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      axios.get('/check_ins').then((response) => {
+        context.commit('retrieveChecks', response.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
-    //Token
-    retrieveToken(context, credentials){
-      var Basicaouth = 'Basic dGVzdDE6cGFzc3dvcmQx'
-      let config = {
+    // Token
+    retrieveToken(context, credentials) {
+      const Basicaouth = 'Basic dGVzdDE6cGFzc3dvcmQx';
+      const config = {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: Basicaouth
-        }
-      }
+          Authorization: Basicaouth,
+        },
+      };
 
       const data = qs.stringify({
         grant_type: 'password',
         username: credentials.username,
-        password: credentials.password
-      })
+        password: credentials.password,
+      });
 
       return new Promise((resolve, reject) => {
-        axios.post('/oauth/token', data, config).then(response => {
-          const token = response.data.accessToken
-          console.log(token)
-
-          localStorage.setItem('accesstoken', token)
-          context.commit('retrieveToken', token)
-          resolve(response)
-
-          ipcRenderer.sendSync('login-success', 'success')
-        }).catch(err => {
-          console.log(err)
-          reject(err)
-        })
-      })
-
+        axios.post('/oauth/token', data, config).then((response) => {
+          const token = response.data.accessToken;
+          localStorage.setItem('accesstoken', token);
+          context.commit('retrieveToken', token);
+          resolve(response);
+          ipcRenderer.sendSync('login-success', 'success');
+        }).catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+      });
     },
     destroyToken(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       if (context.getters.loggedIn) {
-        ipcRenderer.sendSync('login-success', 'logout')
+        ipcRenderer.sendSync('login-success', 'logout');
         return new Promise((resolve, reject) => {
-          axios.post('/logout')
-            .then(response => {
-              localStorage.removeItem('access_token')
-              context.commit('destroyToken')
-              resolve(response)
-            })
-            .catch(error => {
-              localStorage.removeItem('access_token')
-              context.commit('destroyToken')
-              reject(error)
-            })
-        })
+          axios.post('/logout').then((response) => {
+            localStorage.removeItem('access_token');
+            context.commit('destroyToken');
+            resolve(response);
+          }).catch((error) => {
+            localStorage.removeItem('access_token');
+            context.commit('destroyToken');
+            reject(error);
+          });
+        });
       }
-
     },
     retrieveUsers(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-      axios.get('/users')
-      .then(response => {
-        context.commit('retrieveUsers', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      axios.get('/users').then((response) => {
+        context.commit('retrieveUsers', response.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
-
-  }
-})
+  },
+});
