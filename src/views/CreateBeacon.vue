@@ -25,8 +25,9 @@
               <input type="text" class="form-control" id="txtAttachValue" v-model="attachValue" required>
             </div>
             <div class="center-align">
+              <label>{{statusMessage}}</label><br>
               <button class="btn btn-default" id="btn-login">Create Beacon</button><br>
-              <a href="#" v-on:click="closeBeaconInterface()"><p id="close-button">Cancel</p></a>
+              <a href="#" v-on:click="closeBeaconInterface()"><p id="close-button">Close Interface</p></a>
             </div>
         </form>
     </div>
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      statusMessage: '',
       name: '',
       tag: '',
       identifier: '',
@@ -54,15 +56,19 @@ export default {
       ipcRenderer.send('beaconInterface', 'close')
     },
     createBeacon() {
-      this.$store.dispatch('addBeacon',
-      {
-        name: this.name,
-        tag: this.tag,
-        identifier: this.identifier,
-        attachment_key: this.attachKey,
-        attachment_value: this.attachValue
-      })
-      this.closeBeaconInterface()
+      if (this.name && this.tag && this.identifier && this.attachKey && this.attachValue) {
+        this.$store.dispatch('addBeacon',
+        {
+          name: this.name,
+          tag: this.tag,
+          identifier: this.identifier,
+          attachment_key: this.attachKey,
+          attachment_value: this.attachValue
+        }).then(res => this.statusMessage = res.data,
+            this.name = null, this.tag = null, this.identifier = null, this.attachKey = null, this.attachValue = null)
+      } else {
+        this.statusMessage = "All fields must be filled out"
+      }
     }
   }
 }

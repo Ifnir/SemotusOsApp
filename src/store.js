@@ -63,6 +63,7 @@ export default new Vuex.Store({
       })
     },
     addElder(state, elder) {
+      console.log(elder)
       state.elders.push({
         'name': elder.name,
         'beaconId': elder.beaconId,
@@ -140,132 +141,110 @@ export default new Vuex.Store({
       })
     },
     createUser(context, user) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-      axios.post('/user/create', {
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      const response = axios.post('/user/create', {
         username: user.username,
-        password: user.password
-      })
-        .then(() => {
-          context.commit('addUser', user)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        password: user.password,
+      });
+      context.commit('addUser', user);
+      return response;
     },
     addBeacon(context, beacon) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-      axios.post('/beacon/create', {
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      const response = axios.post('/beacon/create', {
         name: beacon.name,
         tag: beacon.tag,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
-        attachment_key: beacon.attachment_key
-      })
-        .then(() => {
-          context.commit('addBeaconToMutation', beacon)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        attachment_key: beacon.attachment_key,
+      });
+      context.commit('addBeaconToMutation', beacon);
+      return response;
     },
     updateBeacon(context, beacon) {
-      axios.post('/beacon_id/edit/' + beacon.id, {
+      axios.post(`/beacon_id/edit/${beacon.id}`, {
         tag: beacon.tag,
         name: beacon.name,
         identifier: beacon.identifier,
         attachment_value: beacon.attachment_value,
-        attachment_key: beacon.attachment_key
-      })
-        .then(() => {
-          context.commit('updateBeacons', beacon)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        attachment_key: beacon.attachment_key,
+      }).then(() => {
+        context.commit('updateBeacons', beacon);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     deleteBeacon(context, id) {
       axios.delete('/beacon_id',
-      {data: {
-        id: id
-      }})
-      .then(() => {
-        context.commit('deleteBeacons', id)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        {
+          data: {
+            id,
+          },
+        }).then(() => {
+        context.commit('deleteBeacons', id);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     deleteUser(context, id) {
       axios.delete('/user_id',
-      {data: {
-        id: id
-      }})
-      .then(() => {
-        context.commit('deleteUser', id)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        {
+          data: {
+            id,
+          },
+        }).then(() => {
+        context.commit('deleteUser', id);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     // -------------------------------------------------------Elders
     retrieveElders(context) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
-
-      axios.get('/elders')
-      .then(response => {
-        context.commit('retrieveElders', response.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
+      axios.get('/elders').then((response) => {
+        context.commit('retrieveElders', response.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     addElder(context, elder) {
-      console.log(elder)
-      axios.post('/elder/create', {
+      const response = axios.post('/elder/create', {
         name: elder.name,
         beaconId: elder.beaconId,
-      })
-        .then(response => {
-          context.commit('addElder', response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      });
+      context.commit('addElder', elder);
+      return response;
     },
     updateElder(context, elder) {
-      axios.post('/elder_id/edit/' + elder.id,  {
+      axios.post(`/elder_id/edit/${elder.id}`, {
         name: elder.name,
-        beaconId: elder.beaconId
-      })
-        .then(() => {
-          context.commit('updateElders', elder)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        beaconId: elder.beaconId,
+      }).then(() => {
+        context.commit('updateElders', elder);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     updateUser(context, user) {
-      axios.post('/user_id/edit/' + user.id,  {
-        username: user.username
-      })
-        .then(() => {
-          context.commit('updateUser', user)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      axios.post(`/user_id/edit/${user.id}`, {
+        username: user.username,
+      }).then(() => {
+        context.commit('updateUser', user);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     deleteElder(context, id) {
       axios.delete('/elder_id',
-      {data: {
-        id: id
-      }})
-      .then(() => {
-        context.commit('deleteElder', id)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+        {
+          data: {
+            id,
+          },
+        }).then(() => {
+        context.commit('deleteElder', id);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     // --------------------------------------------------------Checks
     retrieveChecks(context) {
