@@ -37,6 +37,7 @@ ipcMain.on('beaconInterface', (event, arg) => {
     if (!process.env.IS_TEST) beaconInterface.webContents.openDevTools();
   } else if (arg === 'close') {
     beaconInterface.close();
+    win.reload();
   }
 });
 
@@ -47,6 +48,7 @@ ipcMain.on('elderInterface', (event, arg) => {
     if (!process.env.IS_TEST) elderInterface.webContents.openDevTools();
   } else if (arg === 'close') {
     elderInterface.close();
+    win.reload();
   }
 });
 ipcMain.on('userInterface', (event, arg) => {
@@ -56,6 +58,7 @@ ipcMain.on('userInterface', (event, arg) => {
     if (!process.env.IS_TEST) userInterface.webContents.openDevTools();
   } else if (arg === 'close') {
     userInterface.close();
+    win.reload();
   }
 });
 

@@ -90,11 +90,11 @@ export default {
       return Math.ceil(this.resultCount / this.itemsPerPage)
     },
     paginate() {
-      if (!this.errElder || this.errElder.length !== this.errElder.length) {
+      if (!this.errElder || this.errElder.length <= 0) {
                 return
           }
           
-            if(this.currentPage == 0) {
+            if (this.currentPage == 0) {
               this.currentPage = 1
             }
             this.resultCount = this.errElder.length
@@ -120,7 +120,6 @@ export default {
         if (tempArray[index].beaconId !== elderArray[i].beaconId) {
           this.$store.dispatch('retrieveElders')
           this.testArray = this.anyElders()
-        
       }
     }
   },
@@ -143,9 +142,11 @@ export default {
       this.editedElder = elder
     },
     saveElder() {
+      if (this.selectedValue) {
         this.editedElder['beaconId'] = this.selectedValue['value']
         this.$store.dispatch('updateElder', this.editedElder)
         this.editedElder = null
+      }
     },
     cancelChange() {
       this.editedElder = null
@@ -154,7 +155,9 @@ export default {
     deleteElder(id) {
       if (confirm("Are you sure?")) {
         this.$store.dispatch('deleteElder', id)
-        this.$store.dispatch('retrieveElders')
+        setTimeout(()=>{
+          this.$store.dispatch('retrieveElders')
+          },500);
       }
     },
     openElderInterface() {
