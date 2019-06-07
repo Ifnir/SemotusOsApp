@@ -116,7 +116,9 @@ export default {
       this.editedUser = User;
     },
     deleteUser(id) {
-      this.$store.dispatch('deleteUser', id);
+      if (confirm('Are you sure?')) {
+        this.$store.dispatch('deleteUser', id);
+      }
     },
   },
 };
