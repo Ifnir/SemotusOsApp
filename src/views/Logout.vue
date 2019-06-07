@@ -1,15 +1,13 @@
 <template>
-    <div class="logout">
-        
-    </div>
+  <div class="logout" />
 </template>
 <script>
 export default {
-    created() {
-        this.$store.dispatch('destroyToken')
-        .then(response => {
-            console.log(response)
-        })
-    }
-}
+  created() {
+    this.$store.dispatch('destroyToken')
+      .then((response) => {
+        console.log(response);
+      });
+  },
+};
 </script>

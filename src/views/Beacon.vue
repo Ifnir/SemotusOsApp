@@ -1,168 +1,208 @@
 <template>
   <div class="home">
-    <Nav></Nav>
+    <Nav />
     <div class="wrapper">
       <h2>Beacon</h2>
       <hr>
-      <a class="waves-effect waves-light btn-large" v-on:click="openBeaconInterface()">Add Beacon</a>
+      <a
+        class="waves-effect waves-light btn-large"
+        @click="openBeaconInterface()"
+      >Add Beacon</a>
       <hr>
-  
+
       <table>
         <thead>
           <tr>
-              <th>Name</th>
-              <th>Tag</th>
-              <th>Identifier</th>
-              <th>Attachment Key</th>
-              <th>Attachment Value</th>
-              <th></th>
+            <th>Name</th>
+            <th>Tag</th>
+            <th>Identifier</th>
+            <th>Attachment Key</th>
+            <th>Attachment Value</th>
+            <th />
           </tr>
         </thead>
 
         <tbody>
-          <tr v-for="beacon in paginate" :key="beacon.id" :class="{editing: beacon == editedBeacon}" v-cloak>
+          <tr
+            v-for="beacon in paginate"
+            v-cloak
+            :key="beacon.id"
+            :class="{editing: beacon == editedBeacon}"
+          >
             <td>
               <div class="view">
-                {{beacon.name}}
+                {{ beacon.name }}
               </div>
               <div class="edit">
-                <input type="text" v-model="beacon.name"/>
+                <input
+                  v-model="beacon.name"
+                  type="text"
+                >
               </div>
             </td>
             <td>
               <div class="view">
-                {{beacon.tag}}
+                {{ beacon.tag }}
               </div>
               <div class="edit">
-                <input type="text" v-model="beacon.tag"/>
+                <input
+                  v-model="beacon.tag"
+                  type="text"
+                >
               </div>
             </td>
             <td>
               <div class="view">
-                {{beacon.identifier}}
+                {{ beacon.identifier }}
               </div>
               <div class="edit">
-                <input type="text" v-model="beacon.identifier"/>
+                <input
+                  v-model="beacon.identifier"
+                  type="text"
+                >
               </div>
             </td>
             <td>
               <div class="view">
-                {{beacon.attachment_key}}
+                {{ beacon.attachment_key }}
               </div>
               <div class="edit">
-                <input type="text" v-model="beacon.attachment_key"/>
+                <input
+                  v-model="beacon.attachment_key"
+                  type="text"
+                >
               </div>
             </td>
             <td>
               <div class="view">
-                {{beacon.attachment_value}}
+                {{ beacon.attachment_value }}
               </div>
               <div class="edit">
-                <input type="text" v-model="beacon.attachment_value"/>
+                <input
+                  v-model="beacon.attachment_value"
+                  type="text"
+                >
               </div>
             </td>
             <td>
-                <div class="view">
-                  <a class="theB" v-on:click="editBeacon(beacon)">Edit</a>
-                </div>
-                
-                <div class="edit">
-                  <a class="theB" v-on:click="saveBeacon(beacon)">Save</a>
-                </div>
-                <a class="theB delete" v-on:click="deleteBeacon(beacon.id)">Delete</a>
+              <div class="view">
+                <a
+                  class="theB"
+                  @click="editBeacon(beacon)"
+                >Edit</a>
+              </div>
+
+              <div class="edit">
+                <a
+                  class="theB"
+                  @click="saveBeacon(beacon)"
+                >Save</a>
+              </div>
+              <a
+                class="theB delete"
+                @click="deleteBeacon(beacon.id)"
+              >Delete</a>
             </td>
           </tr>
         </tbody>
       </table>
-     <ul>
-    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1">
-    <a v-bind:key="pageNumber" href="#" @click="setPage(pageNumber)" :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}">{{ pageNumber }}</a>
-    </li>
-    </ul>
+      <ul>
+        <li
+          v-for="pageNumber in totalPages"
+          v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1"
+        >
+          <a
+            :key="pageNumber"
+            href="#"
+            :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}"
+            @click="setPage(pageNumber)"
+          >{{ pageNumber }}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import { ipcRenderer } from 'electron'
-import Nav from './../components/Nav.vue';
+import { ipcRenderer } from 'electron';
+import Nav from '../components/Nav.vue';
+
 export default {
-  name: 'beacon',
+  name: 'Beacon',
+  components: {
+    Nav,
+  },
   data() {
-    return {     
+    return {
       editedBeacon: null,
       tempArray: [],
       currentPage: 0,
       itemsPerPage: 5,
       resultCount: 0,
-    }
-  },
-  components: {
-      Nav
-  },
-  created() {
-    this.$store.dispatch('retrieveBeacons')
+    };
   },
   computed: {
     anyBeacons() {
-      return this.$store.getters.allBeacons
+      return this.$store.getters.allBeacons;
     },
     totalPages() {
-      return Math.ceil(this.resultCount / this.itemsPerPage)
+      return Math.ceil(this.resultCount / this.itemsPerPage);
     },
     paginate() {
       if (!this.anyBeacons || this.anyBeacons.length !== this.anyBeacons.length) {
-                return
-          }
-          
-            if(this.currentPage == 0) {
-              this.currentPage = 1
-            }
-            this.resultCount = this.anyBeacons.length
-            if (this.currentPage >= this.totalPages) {
-              this.currentPage = this.totalPages
-            }
-            var index = this.currentPage * this.itemsPerPage - this.itemsPerPage
-            return this.anyBeacons.slice(index, index + this.itemsPerPage)
-    }
+        return;
+      }
+
+      if (this.currentPage == 0) {
+        this.currentPage = 1;
+      }
+      this.resultCount = this.anyBeacons.length;
+      if (this.currentPage >= this.totalPages) {
+        this.currentPage = this.totalPages;
+      }
+      const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
+      return this.anyBeacons.slice(index, index + this.itemsPerPage);
+    },
   },
   watch: {
     anyBeacons() {
       if (this.tempArray.length <= 0) {
-        this.tempArray = this.$store.getters.allBeacons.splice(0)
-        this.$store.dispatch('retrieveBeacons')
+        this.tempArray = this.$store.getters.allBeacons.splice(0);
+        this.$store.dispatch('retrieveBeacons');
       }
-      
-      var tempArray = JSON.parse(JSON.stringify(this.tempArray))
-      var elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons))
-     
+
+      const tempArray = JSON.parse(JSON.stringify(this.tempArray));
+      const elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons));
+
       if (elderArray.length > tempArray.length) {
-        this.$store.dispatch('retrieveBeacons')
-        this.tempArray = this.$store.getters.allBeacons
+        this.$store.dispatch('retrieveBeacons');
+        this.tempArray = this.$store.getters.allBeacons;
       }
-    }
+    },
+  },
+  created() {
+    this.$store.dispatch('retrieveBeacons');
   },
   methods: {
     setPage(pageNumber) {
-      
-      this.currentPage = pageNumber
+      this.currentPage = pageNumber;
     },
     openBeaconInterface() {
-      ipcRenderer.send('beaconInterface', 'open')
+      ipcRenderer.send('beaconInterface', 'open');
     },
     saveBeacon(beacon) {
-      this.$store.dispatch('updateBeacon', beacon)
-      this.editedBeacon = null
+      this.$store.dispatch('updateBeacon', beacon);
+      this.editedBeacon = null;
     },
     editBeacon(beacon) {
-      this.editedBeacon = beacon
+      this.editedBeacon = beacon;
     },
     deleteBeacon(id) {
-      if(confirm("Are you sure?")) {
-        this.$store.dispatch('deleteBeacon', id)
+      if (confirm('Are you sure?')) {
+        this.$store.dispatch('deleteBeacon', id);
       }
-    }
+    },
   },
-}
+};
 </script>

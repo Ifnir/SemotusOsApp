@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Login from './views/Login.vue';
 import Logout from './views/Logout.vue';
@@ -15,7 +15,7 @@ import CreateUser from './views/CreateUser.vue';
 Vue.use(Router);
 
 export default new Router({
-  //mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
@@ -24,7 +24,7 @@ export default new Router({
       component: Home,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/beacon',
@@ -32,7 +32,7 @@ export default new Router({
       component: Beacon,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/elder',
@@ -40,7 +40,7 @@ export default new Router({
       component: Elder,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/check',
@@ -48,7 +48,7 @@ export default new Router({
       component: Check,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/createbeacon',
@@ -56,7 +56,7 @@ export default new Router({
       component: CreateBeacon,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/createelder',
@@ -64,7 +64,7 @@ export default new Router({
       component: CreateElder,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/createuser',
@@ -72,7 +72,7 @@ export default new Router({
       component: CreateUser,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/login',
@@ -80,7 +80,7 @@ export default new Router({
       component: Login,
       meta: {
         requiresVisitor: true,
-      }
+      },
     },
     {
       path: '/users',
@@ -88,12 +88,12 @@ export default new Router({
       component: Users,
       meta: {
         requiresAuth: true,
-      }
+      },
     },
     {
       path: '/logout',
       name: 'logout',
-      component: Logout
-    }
-  ]
-})
+      component: Logout,
+    },
+  ],
+});
