@@ -1,7 +1,6 @@
 <template>
   <div class="home">
-   
-    <Nav></Nav>
+    <Nav />
     <div class="wrapper">
       <h2>Home</h2>
     </div>
@@ -10,11 +9,12 @@
 
 <script>
 // @ is an alias to /src
-import Nav from './../components/Nav.vue';
+import Nav from '../components/Nav.vue';
+
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
-      Nav
-  }
-}
+    Nav,
+  },
+};
 </script>
