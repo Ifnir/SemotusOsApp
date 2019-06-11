@@ -27,10 +27,10 @@ export default new Vuex.Store({
     loggedIn(state) {
       return state.token !== null;
     },
-    allBeacons(state) {
+    beacons(state) {
       return state.beacons.data;
     },
-    allElders(state) {
+    elders(state) {
       return state.elders.data;
     },
     allChecks(state) {
