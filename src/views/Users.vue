@@ -6,7 +6,7 @@
       <hr>
       <a
         class="waves-effect waves-light btn-large"
-        @click="openUserInterface()"
+        @click="openUserCreationInterface()"
       >Add User</a>
       <hr>
 
@@ -20,10 +20,10 @@
 
         <tbody>
           <tr
-            v-for="user in allUsers"
+            v-for="user in users"
             v-cloak
             :key="user.id"
-            :class="{editing: user == editedUser}"
+            :class="{editing: user == userObject}"
           >
             <td>
               <div class="view">
@@ -72,49 +72,77 @@ export default {
   components: {
     Nav,
   },
+
+  // Properties
   data() {
     return {
-      editedUser: null,
-      tempArray: [],
+      userObject: null,
+      copyOfUsers: [],
     };
   },
+
+  // Data-binded objects
   computed: {
-    allUsers() {
-      return this.$store.getters.allUsers;
+    users() {
+      return this.$store.getters.users;
     },
   },
+
   watch: {
-    anyBeacons() {
-      if (this.tempArray.length <= 0) {
-        this.tempArray = this.$store.getters.allBeacons.splice(0);
-        this.$store.dispatch('retrieveBeacons');
-        console.log('reeee');
+    // Watches for changes in users object using a copy of the users object.
+    users() {
+      if (this.copyOfUsers.length <= 0) {
+        this.copyOfUsers = this.$store.getters.users.splice(0);
+        this.$store.dispatch('retrieveUsers');
       }
-      console.log('test');
-      const tempArray = JSON.parse(JSON.stringify(this.tempArray));
-      const elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons));
-      console.log(tempArray, tempArray.length);
-      console.log(elderArray, elderArray.length);
-      if (elderArray.length > tempArray.length) {
-        this.$store.dispatch('retrieveBeacons');
-        this.tempArray = this.$store.getters.allBeacons;
+      const copyOfUsers = JSON.parse(JSON.stringify(this.copyOfUsers));
+      const userArray = JSON.parse(JSON.stringify(this.$store.getters.users));
+
+      if (userArray.length > copyOfUsers.length) {
+        this.$store.dispatch('retrieveUsers');
+        this.copyOfUsers = this.$store.getters.users;
       }
     },
   },
+
+  // Fetches user information as the view is created.
   created() {
     this.$store.dispatch('retrieveUsers');
   },
   methods: {
-    openUserInterface() {
+
+    /**
+    * Opens interface for creation of new users.
+    * 
+    */
+    openUserCreationInterface() {
       ipcRenderer.send('userInterface', 'open');
     },
+
+    /**
+    * Save user object.
+    * 
+    * @param {user} user object.
+    */
     saveUser(user) {
       this.$store.dispatch('updateUser', user);
-      this.editedUser = null;
+      this.userObject = null;
     },
-    editUser(User) {
-      this.editedUser = User;
+
+    /**
+    * Edit user object.
+    * 
+    * @param {user} user object.
+    */
+    editUser(user) {
+      this.userObject = user;
     },
+
+    /**
+    * Delete user with corresponding ID.
+    * 
+    * @param {id} id of specific user object.
+    */
     deleteUser(id) {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('deleteUser', id);

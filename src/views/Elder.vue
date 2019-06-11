@@ -99,7 +99,7 @@ export default {
     VSelect,
   },
 
-  //Properties
+  // Properties
   data() {
     return {
       elderObject: null,
@@ -108,7 +108,7 @@ export default {
       filteredBeacons: [],
       copyOfElders: [],
       currentPage: 0,
-      itemsPerPage: 4,
+      itemsPerPage: 5,
       resultCount: 0,
     };
   },
@@ -150,6 +150,7 @@ export default {
       const elderArray = JSON.parse(JSON.stringify(this.elders()));
 
       // Check in elderArray for beacon ID changes by comparing with the copy
+      // if so, then retrieve elders data, which contains newest information.
       for (var i in elderArray) {
         const index = copyOfEldersArray.map(e => e.name).indexOf(elderArray[i].name);
         if (copyOfEldersArray[index].beaconId !== elderArray[i].beaconId) {
@@ -251,6 +252,7 @@ export default {
     /**
     * Set page to be shown.
     * 
+    * @param {pageNumber} number of what page to show.
     */
     setPage(pageNumber) {
       this.currentPage = pageNumber;

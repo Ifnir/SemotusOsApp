@@ -58,6 +58,7 @@ export default {
   components: {
     Nav,
   },
+  // Propertis
   data() {
     return {
       currentPage: 0,
@@ -66,46 +67,55 @@ export default {
       searchKey: '',
     };
   },
+
+  // Data-binded objects
   computed: {
-    anyChecks() {
-      console.log(this.$store.getters.allChecks);
-      return this.$store.getters.allChecks;
+    checks() {
+      return this.$store.getters.checks;
     },
     totalPages() {
       return Math.ceil(this.resultCount / this.itemsPerPage);
     },
     paginate() {
-      if (!this.anyChecks || this.anyChecks.length !== this.anyChecks.length) {
+      if (!this.checks || this.checks.length < 0) {
         return;
       }
       const search = this.searchKey.toLowerCase().trim();
 
       if (search) {
-        return this.anyChecks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
+        return this.checks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
       }
 
       if (this.currentPage == 0) {
         this.currentPage = 1;
       }
-      this.resultCount = this.anyChecks.length;
+      this.resultCount = this.checks.length;
       if (this.currentPage >= this.totalPages) {
         this.currentPage = this.totalPages;
       }
       const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
-      return this.anyChecks.slice(index, index + this.itemsPerPage);
+      return this.checks.slice(index, index + this.itemsPerPage);
     },
     filtered() {
       const search = this.searchKey.toLowerCase().trim();
 
-      if (!search) return this.anyChecks;
+      if (!search) 
+        return this.checks;
 
-      return this.anyChecks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
+      return this.checks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
     },
   },
+
+  // Fetches check information as the view is created.
   created() {
     this.$store.dispatch('retrieveChecks');
   },
   methods: {
+    /**
+    * Set page to be shown.
+    * 
+    * @param {pageNumber} number of what page to show.
+    */
     setPage(pageNumber) {
       this.currentPage = pageNumber;
     },

@@ -83,6 +83,8 @@ export default {
   name: 'Createbeacon',
   components: {
   },
+
+  // Properties
   data() {
     return {
       statusMessage: '',
@@ -94,9 +96,18 @@ export default {
     };
   },
   methods: {
+    /**
+    * Closes beacon creation interface.
+    * 
+    */
     closeBeaconInterface() {
       ipcRenderer.send('beaconInterface', 'close');
     },
+
+    /**
+    * Creates new beacon.
+    * 
+    */
     createBeacon() {
       if (this.name && this.tag && this.identifier && this.attachKey && this.attachValue) {
         this.$store.dispatch('addBeacon',

@@ -21,7 +21,7 @@
             <label for="tag">Beacon:</label>
             <v-select
               v-model="beacon"
-              :options="filteredArray"
+              :options="filteredBeacons"
             />
           </div>
           <div class="center-align">
@@ -54,30 +54,53 @@ export default {
   components: {
     VSelect,
   },
+
+  // Properties
   data() {
     return {
       statusMessage: '',
       name: '',
       beacon: '',
-      filteredArray: [],
       filteredBeacons: [],
+      beaconArray: [],
     };
   },
+
+  // Data-binded objects
   computed: {
   },
+  // Fetches beacon information as the view is created.
   created() {
     this.$store.dispatch('retrieveBeacons');
+
+    // setTimeout is used since its otherwise too fast updating the view,
+    // without the changes being shown.
     setTimeout(() => {
-      this.createFilteredArray();
+      this.createFilteredBeacons();
     }, 1000);
   },
   methods: {
+    /**
+    * Return beacon object from store.
+    * 
+    * @returns beacons
+    */
     beacons() {
-      return this.$store.getters.allBeacons;
+      return this.$store.getters.beacons;
     },
+
+    /**
+    * Closes elder creation interface.
+    * 
+    */
     closeElderInterface() {
       ipcRenderer.send('elderInterface', 'close');
     },
+
+    /**
+    * Creates new elder.
+    * 
+    */
     createElder() {
       if (this.name && this.beacon) {
         this.$store.dispatch('addElder',
@@ -90,11 +113,16 @@ export default {
         this.statusMessage = 'A name and beacon must be specified';
       }
     },
-    createFilteredArray() {
-      this.filteredArray = [];
-      this.filteredBeacons = this.beacons().filter(o => !this.beacons().find(o2 => o.id === o2.beaconId));
-      for (let i = 0; i < this.filteredBeacons.length; i++) {
-        this.filteredArray.push({ value: this.filteredBeacons[i].id, text: this.filteredBeacons[i].name });
+
+    /**
+    * Create array with necessary data structure for v-select object.
+    * 
+    */
+    createFilteredBeacons() {
+      this.filteredBeacons = [];
+      this.beaconArray = this.beacons();
+      for (var i = 0; i < this.beaconArray.length; i++) {
+        this.filteredBeacons.push({ value: this.beaconArray[i].id, text: this.beaconArray[i].name });
       }
     },
   },
