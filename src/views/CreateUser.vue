@@ -59,6 +59,8 @@ export default {
   name: 'Createuser',
   components: {
   },
+
+  // Properties
   data() {
     return {
       statusMessage: '',
@@ -68,9 +70,18 @@ export default {
     };
   },
   methods: {
+    /**
+    * Closes user creation interface.
+    * 
+    */
     closeUserInterface() {
       ipcRenderer.send('userInterface', 'close');
     },
+
+    /**
+    * Creates new user.
+    * 
+    */
     createUser() {
       if (this.username && this.password && this.passwordConfirmation) {
         if (this.password !== this.passwordConfirmation) {

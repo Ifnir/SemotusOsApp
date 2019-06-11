@@ -33,10 +33,10 @@ export default new Vuex.Store({
     elders(state) {
       return state.elders.data;
     },
-    allChecks(state) {
+    checks(state) {
       return state.checks.data;
     },
-    allUsers(state) {
+    users(state) {
       return state.users.data;
     },
   },

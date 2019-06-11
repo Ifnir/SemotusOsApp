@@ -6,7 +6,7 @@
       <hr>
       <a
         class="waves-effect waves-light btn-large"
-        @click="openBeaconInterface()"
+        @click="openBeaconCreationInterface()"
       >Add Beacon</a>
       <hr>
 
@@ -133,71 +133,104 @@ export default {
   components: {
     Nav,
   },
+
+  // Properties
   data() {
     return {
       editedBeacon: null,
-      tempArray: [],
+      copyOfBeacons: [],
       currentPage: 0,
       itemsPerPage: 5,
       resultCount: 0,
     };
   },
+
+  // Data-binded objects
   computed: {
-    anyBeacons() {
-      return this.$store.getters.allBeacons;
+    beacons() {
+      return this.$store.getters.beacons;
     },
     totalPages() {
       return Math.ceil(this.resultCount / this.itemsPerPage);
     },
     paginate() {
-      if (!this.anyBeacons || this.anyBeacons.length !== this.anyBeacons.length) {
+      if (!this.beacons || this.beacons.length <= 0) {
         return;
       }
-
       if (this.currentPage == 0) {
         this.currentPage = 1;
       }
-      this.resultCount = this.anyBeacons.length;
+      this.resultCount = this.beacons.length;
       if (this.currentPage >= this.totalPages) {
         this.currentPage = this.totalPages;
       }
       const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
-      return this.anyBeacons.slice(index, index + this.itemsPerPage);
+      return this.beacons.slice(index, index + this.itemsPerPage);
     },
   },
   watch: {
-    anyBeacons() {
-      if (this.tempArray.length <= 0) {
-        this.tempArray = this.$store.getters.allBeacons.splice(0);
+    // Watches for changes in beacons object using a copy of the beacons object.
+    beacons() {
+      if (this.copyOfBeacons.length <= 0) {
+        this.copyOfBeacons = this.$store.getters.beacons.splice(0);
         this.$store.dispatch('retrieveBeacons');
       }
 
-      const tempArray = JSON.parse(JSON.stringify(this.tempArray));
-      const elderArray = JSON.parse(JSON.stringify(this.$store.getters.allBeacons));
+      const copyOfBeacons = JSON.parse(JSON.stringify(this.copyOfBeacons));
+      const beaconArray = JSON.parse(JSON.stringify(this.$store.getters.beacons));
 
-      if (elderArray.length > tempArray.length) {
+      if (beaconArray.length > copyOfBeacons.length) {
         this.$store.dispatch('retrieveBeacons');
-        this.tempArray = this.$store.getters.allBeacons;
+        this.copyOfBeacons = this.$store.getters.beacons;
       }
     },
   },
+  // Fetches beacon information as the view is created.
   created() {
     this.$store.dispatch('retrieveBeacons');
   },
   methods: {
+    /**
+    * Set page to be shown.
+    * 
+    * @param {pageNumber} number of what page to show.
+    */
     setPage(pageNumber) {
       this.currentPage = pageNumber;
     },
-    openBeaconInterface() {
+
+    /**
+    * Opens interface for creation of new beacons.
+    * 
+    */
+    openBeaconCreationInterface() {
       ipcRenderer.send('beaconInterface', 'open');
     },
+    
+    /**
+    * Save beacon object.
+    * 
+    * @param {beacon} beacon object.
+    */
     saveBeacon(beacon) {
       this.$store.dispatch('updateBeacon', beacon);
       this.editedBeacon = null;
     },
+
+    /**
+    * Edit beacon object.
+    * 
+    * @param {beacon} beacon object.
+    */
     editBeacon(beacon) {
       this.editedBeacon = beacon;
     },
+
+    /**
+    * Delete beacon with corresponding ID.
+    * 
+    * @param {id} id of specific beacon object.
+    */
     deleteBeacon(id) {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('deleteBeacon', id);
