@@ -112,7 +112,7 @@ export default {
       resultCount: 0,
     };
   },
-  
+
   // Data-binded objects
   computed: {
     elderWatcher() {
@@ -224,6 +224,8 @@ export default {
     deleteElder(id) {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('deleteElder', id);
+        // setTimeout is used since its otherwise too fast updating the view,
+        // without the changes being shown.
         setTimeout(() => {
           this.$store.dispatch('retrieveElders');
         }, 500);
