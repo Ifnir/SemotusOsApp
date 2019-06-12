@@ -96,14 +96,6 @@ export default {
       const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
       return this.checks.slice(index, index + this.itemsPerPage);
     },
-    filtered() {
-      const search = this.searchKey.toLowerCase().trim();
-
-      if (!search) 
-        return this.checks;
-
-      return this.checks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
-    },
   },
 
   // Fetches check information as the view is created.
