@@ -20,7 +20,7 @@
 
         <tbody>
           <tr
-            v-for="user in users"
+            v-for="user in paginate"
             v-cloak
             :key="user.id"
             :class="{editing: user == userObject}"
@@ -58,6 +58,19 @@
           </tr>
         </tbody>
       </table>
+      <ul>
+        <li
+          v-for="pageNumber in totalPages"
+          v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages || pageNumber == 1"
+        >
+          <a
+            :key="pageNumber"
+            href="#"
+            :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 1 && Math.abs(pageNumber - currentPage) > 3)}"
+            @click="setPage(pageNumber)"
+          >{{ pageNumber }}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -78,6 +91,9 @@ export default {
     return {
       userObject: null,
       copyOfUsers: [],
+      currentPage: 0,
+      itemsPerPage: 10,
+      resultCount: 0,
     };
   },
 
@@ -85,6 +101,29 @@ export default {
   computed: {
     users() {
       return this.$store.getters.users;
+    },
+    totalPages() {
+      return Math.ceil(this.resultCount / this.itemsPerPage);
+    },
+    paginate() {
+      if (!this.checks || this.checks.length < 0) {
+        return;
+      }
+      const search = this.searchKey.toLowerCase().trim();
+
+      if (search) {
+        return this.checks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
+      }
+
+      if (this.currentPage == 0) {
+        this.currentPage = 1;
+      }
+      this.resultCount = this.checks.length;
+      if (this.currentPage >= this.totalPages) {
+        this.currentPage = this.totalPages;
+      }
+      const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
+      return this.checks.slice(index, index + this.itemsPerPage);
     },
   },
 
