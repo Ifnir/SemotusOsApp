@@ -138,7 +138,6 @@ export default {
   data() {
     return {
       editedBeacon: null,
-      copyOfBeacons: [],
       currentPage: 0,
       itemsPerPage: 5,
       resultCount: 0,
