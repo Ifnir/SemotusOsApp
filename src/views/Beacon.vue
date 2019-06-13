@@ -168,23 +168,6 @@ export default {
       return this.beacons.slice(index, index + this.itemsPerPage);
     },
   },
-  watch: {
-    // Watches for changes in beacons object using a copy of the beacons object.
-    beacons() {
-      if (this.copyOfBeacons.length <= 0) {
-        this.copyOfBeacons = this.$store.getters.beacons.splice(0);
-        this.$store.dispatch('retrieveBeacons');
-      }
-
-      const copyOfBeacons = JSON.parse(JSON.stringify(this.copyOfBeacons));
-      const beaconArray = JSON.parse(JSON.stringify(this.$store.getters.beacons));
-
-      if (beaconArray.length > copyOfBeacons.length) {
-        this.$store.dispatch('retrieveBeacons');
-        this.copyOfBeacons = this.$store.getters.beacons;
-      }
-    },
-  },
   // Fetches beacon information as the view is created.
   created() {
     this.$store.dispatch('retrieveBeacons');
