@@ -90,7 +90,6 @@ export default {
   data() {
     return {
       userObject: null,
-      copyOfUsers: [],
       currentPage: 0,
       itemsPerPage: 10,
       resultCount: 0,
@@ -106,41 +105,18 @@ export default {
       return Math.ceil(this.resultCount / this.itemsPerPage);
     },
     paginate() {
-      if (!this.checks || this.checks.length < 0) {
+      if (!this.users || this.users.length < 0) {
         return;
       }
-      const search = this.searchKey.toLowerCase().trim();
-
-      if (search) {
-        return this.checks.filter(c => c.timestamp.toLowerCase().indexOf(search) > -1);
-      }
-
       if (this.currentPage == 0) {
         this.currentPage = 1;
       }
-      this.resultCount = this.checks.length;
+      this.resultCount = this.users.length;
       if (this.currentPage >= this.totalPages) {
         this.currentPage = this.totalPages;
       }
       const index = this.currentPage * this.itemsPerPage - this.itemsPerPage;
-      return this.checks.slice(index, index + this.itemsPerPage);
-    },
-  },
-
-  watch: {
-    // Watches for changes in users object using a copy of the users object.
-    users() {
-      if (this.copyOfUsers.length <= 0) {
-        this.copyOfUsers = this.$store.getters.users.splice(0);
-        this.$store.dispatch('retrieveUsers');
-      }
-      const copyOfUsers = JSON.parse(JSON.stringify(this.copyOfUsers));
-      const userArray = JSON.parse(JSON.stringify(this.$store.getters.users));
-
-      if (userArray.length > copyOfUsers.length) {
-        this.$store.dispatch('retrieveUsers');
-        this.copyOfUsers = this.$store.getters.users;
-      }
+      return this.users.slice(index, index + this.itemsPerPage);
     },
   },
 
