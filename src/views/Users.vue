@@ -128,7 +128,7 @@ export default {
 
     /**
     * Opens interface for creation of new users.
-    * 
+    *
     */
     openUserCreationInterface() {
       ipcRenderer.send('userInterface', 'open');
@@ -136,7 +136,7 @@ export default {
 
     /**
     * Save user object.
-    * 
+    *
     * @param {user} user object.
     */
     saveUser(user) {
@@ -146,7 +146,7 @@ export default {
 
     /**
     * Edit user object.
-    * 
+    *
     * @param {user} user object.
     */
     editUser(user) {
@@ -155,7 +155,7 @@ export default {
 
     /**
     * Delete user with corresponding ID.
-    * 
+    *
     * @param {id} id of specific user object.
     */
     deleteUser(id) {

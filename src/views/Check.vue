@@ -105,7 +105,7 @@ export default {
   methods: {
     /**
     * Set page to be shown.
-    * 
+    *
     * @param {pageNumber} number of what page to show.
     */
     setPage(pageNumber) {

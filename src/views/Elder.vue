@@ -4,10 +4,11 @@
     <div class="wrapper">
       <h2>Elder</h2>
       <hr>
-        <a class="waves-effect waves-light btn-large"
-          @click="openElderCreationInterface()"
-        >Add Elder
-        </a>
+      <a
+        class="waves-effect waves-light btn-large"
+        @click="openElderCreationInterface()"
+      >Add Elder
+      </a>
       <hr>
 
       <table>
@@ -151,7 +152,7 @@ export default {
 
       // Check in elderArray for beacon ID changes by comparing with the copy
       // if so, then retrieve elders data, which contains newest information.
-      for (var i in elderArray) {
+      for (const i in elderArray) {
         const index = copyOfEldersArray.map(e => e.name).indexOf(elderArray[i].name);
         if (copyOfEldersArray[index].beaconId !== elderArray[i].beaconId) {
           this.$store.dispatch('retrieveElders');
@@ -169,7 +170,7 @@ export default {
   methods: {
     /**
     * Return beacon object from store.
-    * 
+    *
     * @returns beacons
     */
     beacons() {
@@ -178,7 +179,7 @@ export default {
 
     /**
     * Return elders object from store.
-    * 
+    *
     * @returns elders
     */
     elders() {
@@ -187,7 +188,7 @@ export default {
 
     /**
     * Edit elder object.
-    * 
+    *
     * @param {elder} contains elder information.
     */
     editElder(elder) {
@@ -197,8 +198,8 @@ export default {
       // Create array of unused beacons.
       this.beaconsAvailable = this.beacons().filter(o => !this.elders().find(o2 => o.id === o2.beaconId));
 
-      //Create array with necessary data structure for v-select object.
-      for (var i = 0; i < this.beaconsAvailable.length; i++) {
+      // Create array with necessary data structure for v-select object.
+      for (let i = 0; i < this.beaconsAvailable.length; i++) {
         this.filteredBeacons.push({ value: this.beaconsAvailable[i].id, text: this.beaconsAvailable[i].name });
       }
       this.elderObject = elder;
@@ -206,7 +207,7 @@ export default {
 
     /**
     * Save elder object.
-    * 
+    *
     */
     saveElder() {
       // If condition, then edit elder object's beaconId to selected.
@@ -219,7 +220,7 @@ export default {
 
     /**
     * Delete elder with corresponding ID.
-    * 
+    *
     * @param {id} id of specific elder object.
     */
     deleteElder(id) {
@@ -235,7 +236,7 @@ export default {
 
     /**
     * Cancel changes of elder object.
-    * 
+    *
     */
     cancelChange() {
       this.elderObject = null;
@@ -243,15 +244,15 @@ export default {
 
     /**
     * Opens interface for creation of new elders.
-    * 
+    *
     */
     openElderCreationInterface() {
       ipcRenderer.send('elderInterface', 'open');
     },
-  
+
     /**
     * Set page to be shown.
-    * 
+    *
     * @param {pageNumber} number of what page to show.
     */
     setPage(pageNumber) {

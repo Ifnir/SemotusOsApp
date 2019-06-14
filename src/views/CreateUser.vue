@@ -72,7 +72,7 @@ export default {
   methods: {
     /**
     * Closes user creation interface.
-    * 
+    *
     */
     closeUserInterface() {
       ipcRenderer.send('userInterface', 'close');
@@ -80,7 +80,7 @@ export default {
 
     /**
     * Creates new user.
-    * 
+    *
     */
     createUser() {
       if (this.username && this.password && this.passwordConfirmation) {

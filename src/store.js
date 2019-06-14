@@ -9,7 +9,7 @@ import qs from 'qs';
 
 Vue.use(Vuex);
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://10.10.50.10:3000';
 
 
 export default new Vuex.Store({

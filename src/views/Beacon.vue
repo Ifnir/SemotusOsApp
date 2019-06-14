@@ -174,7 +174,7 @@ export default {
   methods: {
     /**
     * Set page to be shown.
-    * 
+    *
     * @param {pageNumber} number of what page to show.
     */
     setPage(pageNumber) {
@@ -183,15 +183,15 @@ export default {
 
     /**
     * Opens interface for creation of new beacons.
-    * 
+    *
     */
     openBeaconCreationInterface() {
       ipcRenderer.send('beaconInterface', 'open');
     },
-    
+
     /**
     * Save beacon object.
-    * 
+    *
     * @param {beacon} beacon object.
     */
     saveBeacon(beacon) {
@@ -201,7 +201,7 @@ export default {
 
     /**
     * Edit beacon object.
-    * 
+    *
     * @param {beacon} beacon object.
     */
     editBeacon(beacon) {
@@ -210,7 +210,7 @@ export default {
 
     /**
     * Delete beacon with corresponding ID.
-    * 
+    *
     * @param {id} id of specific beacon object.
     */
     deleteBeacon(id) {
