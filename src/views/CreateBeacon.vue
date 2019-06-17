@@ -110,7 +110,7 @@ export default {
     */
     createBeacon() {
       if (this.name && this.tag && this.identifier && this.attachKey && this.attachValue) {
-        this.$store.dispatch('addBeacon',
+        this.$store.dispatch('createBeacon',
           {
             name: this.name,
             tag: this.tag,

@@ -66,9 +66,6 @@ export default {
     };
   },
 
-  // Data-binded objects
-  computed: {
-  },
   // Fetches beacon information as the view is created.
   created() {
     this.$store.dispatch('retrieveBeacons');
@@ -103,7 +100,7 @@ export default {
     */
     createElder() {
       if (this.name && this.beacon) {
-        this.$store.dispatch('addElder',
+        this.$store.dispatch('createElder',
           {
             name: this.name,
             beaconId: this.beacon.value,

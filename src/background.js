@@ -1,5 +1,3 @@
-
-
 import {
   app, protocol, BrowserWindow, ipcMain,
 } from 'electron';
@@ -23,16 +21,17 @@ let userInterface;
 protocol.registerStandardSchemes(['app'], { secure: true });
 
 ipcMain.on('login-success', (event, arg) => {
-  if (arg == 'success') {
+  if (arg === 'success') {
     win.reload();
     win.show();
     login.hide();
   }
-  if (arg == 'logout') {
+  if (arg === 'logout') {
     app.exit(0);
   }
 });
 
+// Interface for beacon creation.
 ipcMain.on('beaconInterface', (event, arg) => {
   if (arg === 'open') {
     beaconInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
@@ -44,6 +43,7 @@ ipcMain.on('beaconInterface', (event, arg) => {
   }
 });
 
+// Interface for elder creation.
 ipcMain.on('elderInterface', (event, arg) => {
   if (arg === 'open') {
     elderInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
@@ -54,6 +54,8 @@ ipcMain.on('elderInterface', (event, arg) => {
     win.reload();
   }
 });
+
+// Interface for user creation.
 ipcMain.on('userInterface', (event, arg) => {
   if (arg === 'open') {
     userInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
