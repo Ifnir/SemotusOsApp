@@ -27,7 +27,7 @@
             v-for="beacon in paginate"
             v-cloak
             :key="beacon.id"
-            :class="{editing: beacon == editedBeacon}"
+            :class="{editing: beacon == beaconObject}"
           >
             <td>
               <div class="view">
@@ -98,10 +98,18 @@
                   @click="saveBeacon(beacon)"
                 >Save</a>
               </div>
-              <a
-                class="theB delete"
-                @click="deleteBeacon(beacon.id)"
-              >Delete</a>
+              <div class="view">
+                <a
+                  class="theB delete"
+                  @click="deleteBeacon(beacon.id)"
+                >Delete</a>
+              </div>
+              <div class="edit">
+                <a
+                  class="theB delete"
+                  @click="cancelChange()"
+                >Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -137,7 +145,7 @@ export default {
   // Properties
   data() {
     return {
-      editedBeacon: null,
+      beaconObject: null,
       currentPage: 0,
       itemsPerPage: 5,
       resultCount: 0,
@@ -174,7 +182,7 @@ export default {
   methods: {
     /**
     * Set page to be shown.
-    * 
+    *
     * @param {pageNumber} number of what page to show.
     */
     setPage(pageNumber) {
@@ -183,34 +191,42 @@ export default {
 
     /**
     * Opens interface for creation of new beacons.
-    * 
+    *
     */
     openBeaconCreationInterface() {
       ipcRenderer.send('beaconInterface', 'open');
     },
-    
+
     /**
     * Save beacon object.
-    * 
+    *
     * @param {beacon} beacon object.
     */
     saveBeacon(beacon) {
       this.$store.dispatch('updateBeacon', beacon);
-      this.editedBeacon = null;
+      this.beaconObject = null;
     },
 
     /**
     * Edit beacon object.
-    * 
+    *
     * @param {beacon} beacon object.
     */
     editBeacon(beacon) {
-      this.editedBeacon = beacon;
+      this.beaconObject = beacon;
+    },
+
+    /**
+    * Cancel changes of elder object.
+    *
+    */
+    cancelChange() {
+      this.beaconObject = null;
     },
 
     /**
     * Delete beacon with corresponding ID.
-    * 
+    *
     * @param {id} id of specific beacon object.
     */
     deleteBeacon(id) {

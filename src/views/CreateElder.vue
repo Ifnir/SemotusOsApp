@@ -66,9 +66,6 @@ export default {
     };
   },
 
-  // Data-binded objects
-  computed: {
-  },
   // Fetches beacon information as the view is created.
   created() {
     this.$store.dispatch('retrieveBeacons');
@@ -82,7 +79,7 @@ export default {
   methods: {
     /**
     * Return beacon object from store.
-    * 
+    *
     * @returns beacons
     */
     beacons() {
@@ -91,7 +88,7 @@ export default {
 
     /**
     * Closes elder creation interface.
-    * 
+    *
     */
     closeElderInterface() {
       ipcRenderer.send('elderInterface', 'close');
@@ -99,11 +96,11 @@ export default {
 
     /**
     * Creates new elder.
-    * 
+    *
     */
     createElder() {
       if (this.name && this.beacon) {
-        this.$store.dispatch('addElder',
+        this.$store.dispatch('createElder',
           {
             name: this.name,
             beaconId: this.beacon.value,
@@ -116,12 +113,12 @@ export default {
 
     /**
     * Create array with necessary data structure for v-select object.
-    * 
+    *
     */
     createFilteredBeacons() {
       this.filteredBeacons = [];
       this.beaconArray = this.beacons();
-      for (var i = 0; i < this.beaconArray.length; i++) {
+      for (let i = 0; i < this.beaconArray.length; i++) {
         this.filteredBeacons.push({ value: this.beaconArray[i].id, text: this.beaconArray[i].name });
       }
     },

@@ -1,15 +1,12 @@
-
-
-import {
+const {
   app, protocol, BrowserWindow, ipcMain,
-} from 'electron';
+} = require('electron');
 
-import {
-  createProtocol,
-  installVueDevtools,
-} from 'vue-cli-plugin-electron-builder/lib';
+const {
+  createProtocol, installVueDevtools,
+} = require('../node_modules/vue-cli-plugin-electron-builder/lib');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = false;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,42 +20,52 @@ let userInterface;
 protocol.registerStandardSchemes(['app'], { secure: true });
 
 ipcMain.on('login-success', (event, arg) => {
-  if (arg == 'success') {
+  if (arg === 'success') {
     win.reload();
     win.show();
     login.hide();
   }
-  if (arg == 'logout') {
+  if (arg === 'logout') {
     app.exit(0);
   }
 });
 
+// Interface for beacon creation.
 ipcMain.on('beaconInterface', (event, arg) => {
   if (arg === 'open') {
     beaconInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
     beaconInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createbeacon`);
-    if (!process.env.IS_TEST) beaconInterface.webContents.openDevTools();
+    if (isDevelopment) {
+      beaconInterface.webContents.openDevTools();
+    }
   } else if (arg === 'close') {
     beaconInterface.close();
     win.reload();
   }
 });
 
+// Interface for elder creation.
 ipcMain.on('elderInterface', (event, arg) => {
   if (arg === 'open') {
     elderInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
     elderInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createelder`);
-    if (!process.env.IS_TEST) elderInterface.webContents.openDevTools();
+    if (isDevelopment) {
+      elderInterface.webContents.openDevTools();
+    }
   } else if (arg === 'close') {
     elderInterface.close();
     win.reload();
   }
 });
+
+// Interface for user creation.
 ipcMain.on('userInterface', (event, arg) => {
   if (arg === 'open') {
     userInterface = new BrowserWindow({ alwaysOnTop: true, show: true });
     userInterface.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/createuser`);
-    if (!process.env.IS_TEST) userInterface.webContents.openDevTools();
+    if (isDevelopment) {
+      userInterface.webContents.openDevTools();
+    }
   } else if (arg === 'close') {
     userInterface.close();
     win.reload();
@@ -77,11 +84,15 @@ function createWindow() {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
+    win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/check`);
     login.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/#/login`);
 
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
-    if (!process.env.IS_TEST) login.webContents.openDevTools();
+    if (isDevelopment) {
+      win.webContents.openDevTools();
+    }
+    if (isDevelopment) {
+      login.webContents.openDevTools();
+    }
   } else {
     createProtocol('app');
     // Load the index.html when not in development
@@ -115,7 +126,7 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
+  if (isDevelopment) {
     // Install Vue Devtools
     try {
       await installVueDevtools();

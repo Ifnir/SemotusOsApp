@@ -50,10 +50,18 @@
                   @click="saveUser(user)"
                 >Save</a>
               </div>
-              <a
-                class="theB delete"
-                @click="deleteUser(user.id)"
-              >Delete</a>
+              <div class="view">
+                <a
+                  class="theB delete"
+                  @click="deleteUser(user.id)"
+                >Delete</a>
+              </div>
+              <div class="edit">
+                <a
+                  class="theB delete"
+                  @click="cancelChange()"
+                >Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -128,7 +136,7 @@ export default {
 
     /**
     * Opens interface for creation of new users.
-    * 
+    *
     */
     openUserCreationInterface() {
       ipcRenderer.send('userInterface', 'open');
@@ -136,7 +144,7 @@ export default {
 
     /**
     * Save user object.
-    * 
+    *
     * @param {user} user object.
     */
     saveUser(user) {
@@ -146,7 +154,7 @@ export default {
 
     /**
     * Edit user object.
-    * 
+    *
     * @param {user} user object.
     */
     editUser(user) {
@@ -155,13 +163,21 @@ export default {
 
     /**
     * Delete user with corresponding ID.
-    * 
+    *
     * @param {id} id of specific user object.
     */
     deleteUser(id) {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('deleteUser', id);
       }
+    },
+    
+    /**
+    * Cancel changes of elder object.
+    *
+    */
+    cancelChange() {
+      this.userObject = null;
     },
   },
 };
