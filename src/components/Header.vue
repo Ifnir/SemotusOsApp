@@ -2,7 +2,7 @@
   <header id="titlebar">
     <div id="drag-region">
       <div id="window-title">
-        <span>Electron quick start</span>
+        <span>Semotus</span>
       </div>
       <div id="window-controls">
         <div
