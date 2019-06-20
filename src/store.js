@@ -120,7 +120,7 @@ export default new Vuex.Store({
       state.elders.data.splice(index, 1);
     },
     // Delete Beacon in Beacon state.
-    deleteBeacons(state, id) {
+    deleteBeacon(state, id) {
       const index = state.beacons.data.findIndex(item => item.id === id);
       state.beacons.data.splice(index, 1);
     },
@@ -289,7 +289,7 @@ export default new Vuex.Store({
             id,
           },
         }).then(() => {
-        context.commit('deleteBeacons', id);
+        context.commit('deleteBeacon', id);
       }).catch((error) => {
         console.log(error);
       });
