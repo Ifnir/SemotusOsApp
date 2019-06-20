@@ -27,7 +27,7 @@
             v-for="beacon in paginate"
             v-cloak
             :key="beacon.id"
-            :class="{editing: beacon == editedBeacon}"
+            :class="{editing: beacon == beaconObject}"
           >
             <td>
               <div class="view">
@@ -98,10 +98,18 @@
                   @click="saveBeacon(beacon)"
                 >Save</a>
               </div>
-              <a
-                class="theB delete"
-                @click="deleteBeacon(beacon.id)"
-              >Delete</a>
+              <div class="view">
+                <a
+                  class="theB delete"
+                  @click="deleteBeacon(beacon.id)"
+                >Delete</a>
+              </div>
+              <div class="edit">
+                <a
+                  class="theB delete"
+                  @click="cancelChange()"
+                >Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -137,7 +145,7 @@ export default {
   // Properties
   data() {
     return {
-      editedBeacon: null,
+      beaconObject: null,
       currentPage: 0,
       itemsPerPage: 5,
       resultCount: 0,
@@ -196,7 +204,7 @@ export default {
     */
     saveBeacon(beacon) {
       this.$store.dispatch('updateBeacon', beacon);
-      this.editedBeacon = null;
+      this.beaconObject = null;
     },
 
     /**
@@ -205,7 +213,15 @@ export default {
     * @param {beacon} beacon object.
     */
     editBeacon(beacon) {
-      this.editedBeacon = beacon;
+      this.beaconObject = beacon;
+    },
+
+    /**
+    * Cancel changes of elder object.
+    *
+    */
+    cancelChange() {
+      this.beaconObject = null;
     },
 
     /**

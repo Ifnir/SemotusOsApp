@@ -50,10 +50,18 @@
                   @click="saveUser(user)"
                 >Save</a>
               </div>
-              <a
-                class="theB delete"
-                @click="deleteUser(user.id)"
-              >Delete</a>
+              <div class="view">
+                <a
+                  class="theB delete"
+                  @click="deleteUser(user.id)"
+                >Delete</a>
+              </div>
+              <div class="edit">
+                <a
+                  class="theB delete"
+                  @click="cancelChange()"
+                >Cancel</a>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -162,6 +170,14 @@ export default {
       if (confirm('Are you sure?')) {
         this.$store.dispatch('deleteUser', id);
       }
+    },
+    
+    /**
+    * Cancel changes of elder object.
+    *
+    */
+    cancelChange() {
+      this.userObject = null;
     },
   },
 };
