@@ -41,29 +41,35 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    // Set state of Elders.
     setElders(state, elders) {
       state.elders = elders;
     },
+    // Set state of Beacons.
     setBeacons(state, beacons) {
       state.beacons = beacons;
     },
+    // Set state of Checks.
     setChecks(state, checks) {
       state.checks = checks;
     },
+    // Set state of Users.
     setUsers(state, users) {
       state.users = users;
     },
+    // Set state of Token.
     setToken(state, token) {
       state.token = token;
     },
 
+    // Add Elder to Elders state.
     addElderToElders(state, elder) {
       state.elders.push({
         name: elder.name,
         beaconId: elder.beaconId,
       });
     },
-
+    // Add Beacon to Beacon state.
     addBeaconToBeacons(state, beacon) {
       state.beacons.push({
         id: beacon.id,
@@ -74,13 +80,14 @@ export default new Vuex.Store({
         attachment_value: beacon.attachment_value,
       });
     },
+    // Add User to User state.
     addUserToUsers(state, user) {
       state.users.push({
         name: user.username,
         password: user.password,
       });
     },
-
+    // Update Elder in Elder state.
     updateElder(state, elder) {
       const index = state.elders.data.findIndex(item => item.id === elder.id);
       state.elders.data.splice(index, 1, {
@@ -88,6 +95,7 @@ export default new Vuex.Store({
         beaconId: elder.beaconId,
       });
     },
+    // Update Beacon in Beacon state.
     updateBeacon(state, beacon) {
       const index = state.beacons.data.findIndex(item => item.id === beacon.id);
       state.beacons.data.splice(index, 1, {
@@ -99,31 +107,36 @@ export default new Vuex.Store({
         attachment_value: beacon.attachment_value,
       });
     },
+    // Update User in User state.
     updateUser(state, user) {
       const index = state.users.data.findIndex(item => item.id === user.id);
       state.users.data.splice(index, 1, {
         username: user.username,
       });
     },
-
+    // Delete Elder in Elder state.
     deleteElder(state, id) {
       const index = state.elders.data.findIndex(item => item.id === id);
       state.elders.data.splice(index, 1);
     },
+    // Delete Beacon in Beacon state.
     deleteBeacons(state, id) {
       const index = state.beacons.data.findIndex(item => item.id === id);
       state.beacons.data.splice(index, 1);
     },
+    // Delete User in User state.
     deleteUser(state, id) {
       const index = state.users.data.findIndex(item => item.id === id);
       state.users.data.splice(index, 1);
     },
+    // Delete Token in Token state.
     destroyToken(state) {
       state.token = null;
     },
   },
   actions: {
 
+    // Retrieves Elders from API server, and add response to Elders state.
     retrieveElders(context) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       axios.get('/elders').then((response) => {
@@ -132,6 +145,7 @@ export default new Vuex.Store({
         console.log(err);
       });
     },
+    // Retrieves Beacons from API server, and add response to Beacons state.
     retrieveBeacons(context) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       axios.get('/beacon').then((response) => {
@@ -140,6 +154,7 @@ export default new Vuex.Store({
         console.log(err);
       });
     },
+    // Retrieves Checks from API server, and add response to Checks state.
     retrieveChecks(context) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       axios.get('/check_ins').then((response) => {
@@ -148,6 +163,7 @@ export default new Vuex.Store({
         console.log(err);
       });
     },
+    // Retrieves Users from API server, and add response to Users state.
     retrieveUsers(context) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       axios.get('/users').then((response) => {
@@ -156,6 +172,7 @@ export default new Vuex.Store({
         console.log(err);
       });
     },
+    // Retrieves Token from API server, and add response to token state.
     retrieveToken(context, credentials) {
       const Basicaouth = 'Basic dGVzdDE6cGFzc3dvcmQx';
       const config = {
@@ -184,7 +201,7 @@ export default new Vuex.Store({
         });
       });
     },
-
+    // Creates Elder by sending POST to API server add Elder to Elder state.
     createElder(context, elder) {
       const response = axios.post('/elder/create', {
         name: elder.name,
@@ -193,6 +210,7 @@ export default new Vuex.Store({
       context.commit('addElderToElders', elder);
       return response;
     },
+    // Creates Beacon by sending POST to API server add Beacon to Beacon state.
     createBeacon(context, beacon) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       const response = axios.post('/beacon/create', {
@@ -205,7 +223,7 @@ export default new Vuex.Store({
       context.commit('addBeaconToBeacons', beacon);
       return response;
     },
-
+    // Creates User by sending POST to API server add User to User state.
     createUser(context, user) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       const response = axios.post('/user/create', {
@@ -215,6 +233,7 @@ export default new Vuex.Store({
       context.commit('addUserToUsers', user);
       return response;
     },
+    // Update Elder by sending POST to API server and update Elder in Elder object.
     updateElder(context, elder) {
       axios.post(`/elder_id/edit/${elder.id}`, {
         name: elder.name,
@@ -225,6 +244,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Update Beacon by sending POST to API server and update Beacon in Beacon object.
     updateBeacon(context, beacon) {
       axios.post(`/beacon_id/edit/${beacon.id}`, {
         tag: beacon.tag,
@@ -238,6 +258,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Update User by sending POST to API server and update User in User state.
     updateUser(context, user) {
       axios.post(`/user_id/edit/${user.id}`, {
         username: user.username,
@@ -247,6 +268,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Delete Elder by sending DELETE to API server and delete Elder from Elder state.
     deleteElder(context, id) {
       axios.delete('/elder_id',
         {
@@ -259,6 +281,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Delete Beacon by sending DELETE to API server and delete Beacon from Beacon state.
     deleteBeacon(context, id) {
       axios.delete('/beacon_id',
         {
@@ -271,6 +294,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Delete User by sending DELETE to API server and delete User from User state.
     deleteUser(context, id) {
       axios.delete('/user_id',
         {
@@ -283,6 +307,7 @@ export default new Vuex.Store({
         console.log(error);
       });
     },
+    // Destroy Token from localStorage and logout the user.
     destroyToken(context) {
       axios.defaults.headers.common.Authorization = `Bearer ${context.state.token}`;
       if (context.getters.loggedIn) {
